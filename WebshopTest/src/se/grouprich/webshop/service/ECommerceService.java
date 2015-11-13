@@ -3,7 +3,7 @@ package se.grouprich.webshop.service;
 import java.util.UUID;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
-import se.grouprich.webshop.exception.LogInException;
+import se.grouprich.webshop.exception.LoginException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
 import se.grouprich.webshop.exception.ProductRegistrationException;
@@ -15,28 +15,28 @@ import se.grouprich.webshop.repository.Repository;
 
 public final class ECommerceService
 {
-	private final Repository<Order> orderRepository;
-	private final Repository<Customer> customerRepository;
-	private final Repository<Product> productRepository;
+	private final Repository<UUID, Order> orderRepository;
+	private final Repository<UUID, Customer> customerRepository;
+	private final Repository<UUID, Product> productRepository;
 
-	public ECommerceService(Repository<Order> orderRepository, Repository<Customer> customerRepository, Repository<Product> productRepository)
+	public ECommerceService(Repository<UUID, Order> orderRepository, Repository<UUID, Customer> customerRepository, Repository<UUID, Product> productRepository)
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
-		this.productRepository = productRepository;
+		this.productRepository = productRepository;		
 	}
 
-	public Repository<Order> getOrderRepository()
+	public Repository<UUID, Order> getOrderRepository()
 	{
 		return orderRepository;
 	}
 
-	public Repository<Customer> getCustomerRepository()
+	public Repository<UUID, Customer> getCustomerRepository()
 	{
 		return customerRepository;
 	}
 
-	public Repository<Product> getProductRepository()
+	public Repository<UUID, Product> getProductRepository()
 	{
 		return productRepository;
 	}
@@ -161,7 +161,7 @@ public final class ECommerceService
 		return totalPrice;
 	}
 
-	public void pay(Order order) throws PaymentException, LogInException
+	public void pay(Order order) throws PaymentException, LoginException
 	{
 		if (order.getCustomer().isLoggedIn())
 		{
@@ -170,11 +170,11 @@ public final class ECommerceService
 		}
 		else
 		{
-			throw new LogInException("You must log in to make a payment");
+			throw new LoginException("You must log in to make a payment");
 		}
 	}
 
-	public void logIn(String email, String password) throws RepositoryException, LogInException
+	public void logIn(String email, String password) throws RepositoryException, LoginException
 	{
 		if (customerRepository.getAll().containsValue(getCustomerByEmail(email)))
 		{
@@ -188,12 +188,12 @@ public final class ECommerceService
 			}
 			else
 			{
-				throw new LogInException("You are already logged in");
+				throw new LoginException("You are already logged in");
 			}
 		}
 		else
 		{
-			throw new LogInException("You are not registered");
+			throw new LoginException("You are not registered");
 		}
 	}
 
