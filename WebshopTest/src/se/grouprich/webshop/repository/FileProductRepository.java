@@ -8,7 +8,7 @@ import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.repository.file.ProductFileInfo;
 
-public final class FileProductRepository implements Repository<Product, UUID>
+public final class FileProductRepository implements Repository<UUID, Product>
 {
 	private final Map<UUID, Product> products;
 	private ProductFileInfo productFileInfo;

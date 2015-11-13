@@ -8,7 +8,7 @@ import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.repository.file.OrderFileInfo;
 
-public final class FileOrderRepository implements Repository<Order, UUID>
+public final class FileOrderRepository implements Repository<UUID, Order>
 {
 	private final Map<UUID, Order> orders;
 	private OrderFileInfo orderFileInfo;

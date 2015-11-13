@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import se.grouprich.webshop.exception.RepositoryException;
 
-public interface Repository<T, K>
+public interface Repository<K, T>
 {
 	void create(T value);
 	void delete(K value);

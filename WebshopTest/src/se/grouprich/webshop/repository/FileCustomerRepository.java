@@ -8,7 +8,7 @@ import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.repository.file.CustomerFileInfo;
 
-public final class FileCustomerRepository implements Repository<Customer, UUID>
+public final class FileCustomerRepository implements Repository<UUID, Customer>
 {
 	private final Map<UUID, Customer> customers;
 	private CustomerFileInfo customerFileInfo;
