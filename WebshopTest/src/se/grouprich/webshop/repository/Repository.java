@@ -5,11 +5,11 @@ import java.util.UUID;
 
 import se.grouprich.webshop.exception.RepositoryException;
 
-public interface Repository<T>
+public interface Repository<T, K>
 {
 	void create(T value);
-	void delete(UUID value);
-	void uppdate(UUID id, T value);
-	T read(UUID id) throws RepositoryException;
-	Map<UUID, T> getAll();
+	void delete(K value);
+	void uppdate(K id, T value);
+	T read(K id) throws RepositoryException;
+	Map<K, T> getAll();
 }
