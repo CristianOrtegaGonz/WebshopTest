@@ -57,4 +57,20 @@ public final class ShoppingCart implements Serializable
 	{
 		products.removeAll(products);
 	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if (this == other)
+		{
+			return true;
+		}
+
+		if (other instanceof ShoppingCart)
+		{
+			ShoppingCart otherShoppingCart = (ShoppingCart) other;
+			return products.equals(otherShoppingCart.products) && totalPrice == otherShoppingCart.totalPrice;
+		}
+		return false;
+	}
 }
