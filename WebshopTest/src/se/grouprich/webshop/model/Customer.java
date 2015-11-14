@@ -96,4 +96,3 @@ public final class Customer implements Serializable
 		return "[Name] " + getName() + " [E-mail] " + email;
 	}
 }
-
