@@ -2,7 +2,6 @@ package se.grouprich.webshop.repository.file;
 
 import java.io.File;
 import java.util.Map;
-import java.util.UUID;
 
 public interface FileManager<K, T>
 {
