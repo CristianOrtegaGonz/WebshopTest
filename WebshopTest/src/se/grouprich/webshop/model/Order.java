@@ -25,6 +25,11 @@ public final class Order implements Serializable
 		return orderId;
 	}
 
+	public ShoppingCart getShoppingCart()
+	{
+		return shoppingCart;
+	}
+	
 	public Customer getCustomer()
 	{
 		return customer;
