@@ -85,4 +85,3 @@ public final class OrderFileInfo implements FileManager<Order>
 		}
 	}
 }
-

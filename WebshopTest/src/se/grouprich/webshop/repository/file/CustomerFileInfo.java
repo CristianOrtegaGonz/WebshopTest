@@ -86,4 +86,3 @@ public final class CustomerFileInfo implements FileManager<Customer>
 		}
 	}
 }
-
