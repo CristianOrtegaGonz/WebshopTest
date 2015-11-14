@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import se.grouprich.webshop.model.Customer;
 
-public final class CustomerFileInfo implements FileManager<Customer>
+public final class CustomerFileInfo implements FileManager<UUID, Customer>
 {
 	@Override
 	public File getDirectory()
