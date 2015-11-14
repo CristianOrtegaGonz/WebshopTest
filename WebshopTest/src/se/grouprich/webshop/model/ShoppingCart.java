@@ -12,7 +12,7 @@ public final class ShoppingCart implements Serializable
 	private List<Product> products;
 	private double totalPrice;
 
-	ShoppingCart()
+	public ShoppingCart()
 	{
 		products = new ArrayList<>();
 		totalPrice = 0;
