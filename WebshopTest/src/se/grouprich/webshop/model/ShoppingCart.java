@@ -73,4 +73,13 @@ public final class ShoppingCart implements Serializable
 		}
 		return false;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		int result = 1;
+		result += products.hashCode() * 37;
+		result += totalPrice *37;
+		return result;
+	}
 }
