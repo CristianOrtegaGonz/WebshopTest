@@ -1,28 +1,23 @@
 package se.grouprich.webshop.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
 
 public final class Order implements Serializable
 {
 	private static final long serialVersionUID = 3380539865925002167L;
 	private final UUID orderId;
-	private List<Product> productsInShoppingCartList;
-	private double totalPrice;
+	private final ShoppingCart shoppingCart;
 	private Customer customer;
 	private boolean isPayed = false;
 
-	public Order(Customer customer)
+	public Order(Customer customer, ShoppingCart shoppingCart)
 	{
 		orderId = UUID.randomUUID();
-		productsInShoppingCartList = new ArrayList<Product>();
-		totalPrice = 0;
 		this.customer = customer;
+		this.shoppingCart = shoppingCart;
 	}
 
 	public UUID getOrderId()
@@ -30,59 +25,17 @@ public final class Order implements Serializable
 		return orderId;
 	}
 
-	public List<Product> getProductsInShoppingCartList()
-	{
-		return productsInShoppingCartList;
-	}
-
 	public Customer getCustomer()
 	{
 		return customer;
 	}
-	
-	public void addProductInShoppingCart(Product productInShoppingCart)
-	{
-		productsInShoppingCartList.add(productInShoppingCart);
-		calculateTotalPrice(productsInShoppingCartList);
-	}
-
-	public void deleteOneProduct(Product productInShoppingCart) throws OrderException
-	{
-		if (!productsInShoppingCartList.contains(productInShoppingCart))
-		{
-			throw new OrderException("Product doesn't exsists.");
-		}
-		productsInShoppingCartList.remove(productInShoppingCart);
-	}
-
-	public void emptyShoppingCart(List<Product> productInShoppingCart)
-	{
-		productInShoppingCart.removeAll(productInShoppingCart);
-	}
-
-	public double calculateTotalPrice(List<Product> productsInShoppingCart)
-	{
-		totalPrice = 0;
-		for (Product product : productsInShoppingCart)
-		{
-			totalPrice = totalPrice + product.getPrice() * product.getOrderQuantity();
-		}
-		return totalPrice;
-	}
 
 	public void pay() throws PaymentException
 	{
-		if (customer.isLoggedIn())
+		isPayed = true;
+		for (Product product : shoppingCart.getProducts())
 		{
-			isPayed = true;
-			for (Product product : productsInShoppingCartList)
-			{
-				product.setStockQuantity(product.getStockQuantity() - product.getOrderQuantity());
-			}
-		}
-		else
-		{
-			throw new PaymentException("You are not logged in. You must first log in to pay.");
+			product.setStockQuantity(product.getStockQuantity() - product.getOrderQuantity());
 		}
 	}
 
@@ -101,8 +54,8 @@ public final class Order implements Serializable
 
 		if (other instanceof Order)
 		{
-			Order otherShoppingCart = (Order) other;
-			return orderId == otherShoppingCart.orderId && productsInShoppingCartList.equals(otherShoppingCart.productsInShoppingCartList);
+			Order otherOrder = (Order) other;
+			return orderId == otherOrder.orderId && shoppingCart.equals(otherOrder.shoppingCart);
 		}
 		return false;
 	}
@@ -112,7 +65,7 @@ public final class Order implements Serializable
 	{
 		int result = 1;
 		result += orderId.hashCode() * 37;
-		result += productsInShoppingCartList.hashCode() * 37;
+		result += shoppingCart.hashCode() * 37;
 
 		return result;
 	}
@@ -120,12 +73,6 @@ public final class Order implements Serializable
 	@Override
 	public String toString()
 	{
-		return productsInShoppingCartList.toString();
-	}
-
-	public void setOrders(List<Product> orders)
-	{
-		this.productsInShoppingCartList = orders;
+		return shoppingCart.toString();
 	}
 }
-
