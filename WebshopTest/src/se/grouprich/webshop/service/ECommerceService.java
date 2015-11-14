@@ -3,7 +3,6 @@ package se.grouprich.webshop.service;
 import java.util.UUID;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
-import se.grouprich.webshop.exception.LoginException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
 import se.grouprich.webshop.exception.ProductRegistrationException;
@@ -11,6 +10,7 @@ import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
+import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
 
 public final class ECommerceService
@@ -23,7 +23,7 @@ public final class ECommerceService
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
-		this.productRepository = productRepository;		
+		this.productRepository = productRepository;
 	}
 
 	public Repository<UUID, Order> getOrderRepository()
@@ -67,9 +67,9 @@ public final class ECommerceService
 		}
 	}
 
-	public Order makeShoppingCart(Customer customer)
+	public ShoppingCart makeShoppingCart()
 	{
-		return new Order(customer);
+		return new ShoppingCart();
 	}
 
 	public void deleteCustomer(UUID customerId)
@@ -117,19 +117,19 @@ public final class ECommerceService
 		return productRepository.read(productId);
 	}
 
-	public void addProductInShoppingCart(Order order, UUID productId, int orderQuantity) throws RepositoryException, OrderException
+	public void addProductInShoppingCart(ShoppingCart shoppingCart, UUID productId, int orderQuantity) throws RepositoryException, OrderException
 	{
 		if (productRepository.getAll().containsKey(productId))
 		{
 			Product product = productRepository.read(productId);
-			if (order.getProductsInShoppingCartList().contains(product))
+			if (shoppingCart.getProducts().contains(product))
 			{
 				product.addOrderQuantity(orderQuantity);
 				return;
 			}
 			if (product.getStockQuantity() >= orderQuantity)
 			{
-				order.addProductInShoppingCart(product);
+				shoppingCart.addProductInShoppingCart(product);
 				product.setOrderQuantity(orderQuantity);
 			}
 		}
@@ -139,12 +139,12 @@ public final class ECommerceService
 		}
 	}
 
-	public void changeOrderQuantity(Order order, UUID productId, int orderQuantity) throws RepositoryException, OrderException
+	public void changeOrderQuantity(ShoppingCart shoppingCart, UUID productId, int orderQuantity) throws RepositoryException, OrderException
 	{
 		if (productRepository.getAll().containsKey(productId))
 		{
 			Product product = productRepository.read(productId);
-			if (order.getProductsInShoppingCartList().contains(product) && product.getStockQuantity() >= orderQuantity)
+			if (shoppingCart.getProducts().contains(product) && product.getStockQuantity() >= orderQuantity)
 			{
 				product.setOrderQuantity(orderQuantity);
 			}
@@ -155,46 +155,16 @@ public final class ECommerceService
 		}
 	}
 
-	public double calculateTotalPrice(Order order)
+	public double calculateTotalPrice(ShoppingCart shoppingCart)
 	{
-		double totalPrice = order.calculateTotalPrice(order.getProductsInShoppingCartList());
+		double totalPrice = shoppingCart.calculateTotalPrice(shoppingCart.getProducts());
 		return totalPrice;
 	}
 
-	public void pay(Order order) throws PaymentException, LoginException
+	public void pay(Order order) throws PaymentException
 	{
-		if (order.getCustomer().isLoggedIn())
-		{
-			order.pay();
-			orderRepository.create(order);
-		}
-		else
-		{
-			throw new LoginException("You must log in to make a payment");
-		}
-	}
-
-	public void logIn(String email, String password) throws RepositoryException, LoginException
-	{
-		if (customerRepository.getAll().containsValue(getCustomerByEmail(email)))
-		{
-			Customer customer = getCustomerByEmail(email);
-			if (!customer.isLoggedIn())
-			{
-				if (customer.getEmail().equals(email) && customer.getPassword().equals(password))
-				{
-					customer.logIn(email, password);
-				}
-			}
-			else
-			{
-				throw new LoginException("You are already logged in");
-			}
-		}
-		else
-		{
-			throw new LoginException("You are not registered");
-		}
+		order.pay();
+		orderRepository.create(order);
 	}
 
 	public Product getProductByName(String productName) throws RepositoryException
@@ -220,7 +190,7 @@ public final class ECommerceService
 		}
 		return null;
 	}
-	
+
 	public Order getOrderByCustomerID(UUID customerId) throws RepositoryException
 	{
 		for (Order order : orderRepository.getAll().values())

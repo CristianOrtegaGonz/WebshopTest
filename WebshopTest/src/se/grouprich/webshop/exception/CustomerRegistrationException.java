@@ -7,4 +7,3 @@ public final class CustomerRegistrationException extends Exception
 		super(message);
 	}
 }
-

@@ -113,4 +113,3 @@ public final class Product implements Serializable
 		return productName + "(" + productId + ") ---- Price: " + price + " kr ---- Stock quantity: " + stockQuantity;
 	}
 }
-
