@@ -13,7 +13,6 @@ import se.grouprich.webshop.model.Product;
 
 public final class ProductFileInfo implements FileManager<UUID, Product>
 {
-
 	@Override
 	public File getDirectory()
 	{
