@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.Map;
 
 import se.grouprich.webshop.model.Product;
-
+@Deprecated
 public final class ProductFileInfo implements FileManager<String, Product>
 {
 	@Override

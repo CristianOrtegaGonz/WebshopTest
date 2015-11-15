@@ -1,14 +1,14 @@
 package se.grouprich.webshop.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
+import se.grouprich.webshop.idgenerator.Identifiable;
 
-public final class Customer implements Serializable
+public final class Customer implements Serializable, Identifiable<String>
 {
 	private static final long serialVersionUID = 8550124813033398565L;
-	private final String customerId;
+	private String customerId;
 	private String email;
 	private String password;
 	private final String firstName;
@@ -16,16 +16,23 @@ public final class Customer implements Serializable
 
 	public Customer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
+		customerId = null;
 		this.email = email;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		customerId = UUID.randomUUID().toString();
 	}
-
-	public String getCustomerId()
+	
+	@Override
+	public String getId()
 	{
 		return customerId;
+	}
+
+	@Override
+	public void setId(String customerId)
+	{
+		this.customerId = customerId;
 	}
 
 	public String getEmail()

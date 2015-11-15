@@ -1,7 +1,5 @@
 package se.grouprich.webshop.service;
 
-import java.util.UUID;
-
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
@@ -195,7 +193,7 @@ public final class ECommerceService
 	{
 		for (Order order : orderRepository.getAll().values())
 		{
-			if (order.getCustomer().getCustomerId().equals(customerId))
+			if (order.getCustomer().getId().equals(customerId))
 			{
 				return order;
 			}

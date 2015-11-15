@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream;
 import java.util.Map;
 
 import se.grouprich.webshop.model.Customer;
-
+@Deprecated
 public final class CustomerFileInfo implements FileManager<String, Customer>
 {
 	@Override

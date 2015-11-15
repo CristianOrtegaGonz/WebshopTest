@@ -8,20 +8,25 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
 
-import se.grouprich.webshop.model.Order;
-@Deprecated
-public final class OrderFileInfo implements FileManager<String, Order>
+public final class ECommerceFileInfo<T> implements FileManager<String, T>
 {
+	private String fileName;
+
+	public ECommerceFileInfo(Class<T> classType)
+	{
+		fileName = (classType.getSimpleName() + "s").toLowerCase();
+	}
+
 	@Override
 	public File getDirectory()
 	{
-		return new File("orders");
+		return new File(fileName);
 	}
 
 	@Override
 	public String getFileName()
 	{
-		return "orders";
+		return fileName;
 	}
 
 	@Override
@@ -30,11 +35,13 @@ public final class OrderFileInfo implements FileManager<String, Order>
 		return ".data";
 	}
 
+	@Override
 	public File getPath()
 	{
 		return new File(getDirectory(), getFileName() + getFileExtension());
 	}
 
+	@Override
 	public void createDirectory()
 	{
 		File dir = getDirectory();
@@ -57,12 +64,12 @@ public final class OrderFileInfo implements FileManager<String, Order>
 	}
 
 	@Override
-	public void createFile(Map<String, Order> orders)
+	public void createFile(Map<String, T> values)
 	{
 		createDirectory();
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getPath())))
 		{
-			out.writeObject(orders);
+			out.writeObject(values);
 		}
 		catch (IOException e)
 		{
@@ -72,15 +79,15 @@ public final class OrderFileInfo implements FileManager<String, Order>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readFile(Map<String, Order> orders)
+	public void readFile(Map<String, T> values)
 	{
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(getPath())))
 		{
-			orders.putAll((Map<String, Order>) in.readObject());
+			values.putAll((Map<String, T>) in.readObject());
 		}
 		catch (IOException | ClassNotFoundException e)
 		{
-			throw new RuntimeException("Could not restore order repository", e);
+			throw new RuntimeException("Could not restore repository", e);
 		}
 	}
 }

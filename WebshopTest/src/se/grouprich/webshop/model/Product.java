@@ -1,15 +1,15 @@
 package se.grouprich.webshop.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.ProductRegistrationException;
+import se.grouprich.webshop.idgenerator.Identifiable;
 
-public final class Product implements Serializable
+public final class Product implements Serializable, Identifiable<String>
 {
 	private static final long serialVersionUID = 5072511887999675702L;
-	private final String productId;
+	private String productId;
 	private String productName;
 	private double price;
 	private int stockQuantity;
@@ -17,15 +17,22 @@ public final class Product implements Serializable
 
 	public Product(String productName, double price, int stockQuantity) throws ProductRegistrationException
 	{
-		productId = UUID.randomUUID().toString();
+		productId = null;
 		this.productName = productName;
 		this.price = price;
 		this.stockQuantity = stockQuantity;
 	}
 
-	public String getProductId()
+	@Override
+	public String getId()
 	{
 		return productId;
+	}
+
+	@Override
+	public void setId(String productId)
+	{
+		this.productId = productId;
 	}
 
 	public String getProductName()
@@ -97,7 +104,7 @@ public final class Product implements Serializable
 		}
 		return false;
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
