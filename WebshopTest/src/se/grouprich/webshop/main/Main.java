@@ -32,7 +32,7 @@ public final class Main
 		eCommerceService.registerProduct("Eco Shampoo", 30.00, 100);
 
 		Customer customer = eCommerceService.getCustomerByEmail("arbieto@mail.com");
-		System.out.println("Haydee's id:" + customer.getId());
+		System.out.println("Haydee's id: " + customer.getId());
 		ShoppingCart shoppingCart1 = eCommerceService.makeShoppingCart();
 		
 		Order order = new Order(customer, shoppingCart1);
