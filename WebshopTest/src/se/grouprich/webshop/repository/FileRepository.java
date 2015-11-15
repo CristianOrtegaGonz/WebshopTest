@@ -11,9 +11,9 @@ import se.grouprich.webshop.repository.file.FileManager;
 
 public final class FileRepository<T extends Identifiable<String>> implements Repository<String, T>
 {
-	private Map<String, T> values;
-	private FileManager<String, T> fileInfo;
-	private ECommerceIdGenerator idGenerator;
+	private final Map<String, T> values;
+	private final FileManager<String, T> fileInfo;
+	private final ECommerceIdGenerator idGenerator;
 
 	public FileRepository(Class<T> classType)
 	{
