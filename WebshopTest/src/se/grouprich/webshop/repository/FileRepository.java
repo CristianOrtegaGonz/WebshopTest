@@ -18,8 +18,12 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	public FileRepository(Class<T> classType)
 	{
 		values = new HashMap<>();
-		fileInfo = new ECommerceFileInfo<T>(classType);
+		fileInfo = new ECommerceFileInfo<>(classType);
 		idGenerator = new ECommerceIdGenerator();
+		if ((fileInfo.getPath()).exists())
+		{
+			fileInfo.readFile(values);
+		}
 	}
 
 	public void create(T value)
@@ -54,7 +58,7 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		{
 			return values.get(id);
 		}
-		throw new RepositoryException("Id doesn't exists");
+		throw new RepositoryException("This id doesn't exists");
 	}
 	
 	@Override
