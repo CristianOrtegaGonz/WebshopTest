@@ -1,5 +1,7 @@
 package se.grouprich.webshop.service;
 
+import java.util.Map;
+
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
@@ -9,6 +11,7 @@ import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
+import se.grouprich.webshop.repository.FileRepository;
 import se.grouprich.webshop.repository.Repository;
 
 public final class ECommerceService
@@ -159,9 +162,10 @@ public final class ECommerceService
 		return totalPrice;
 	}
 
-	public void pay(Order order) throws PaymentException
+	public void pay(Customer customer, ShoppingCart shoppingCart) throws PaymentException
 	{
-		order.pay();
+		shoppingCart.pay();
+		Order order = new Order(customer, shoppingCart);
 		orderRepository.create(order);
 	}
 
@@ -200,5 +204,9 @@ public final class ECommerceService
 		}
 		return null;
 	}
+
+	public Map<String, Order> getOrders()
+	{
+		return orderRepository.getAll();
+	}
 }
-//Test
