@@ -26,13 +26,13 @@ public final class Main
 
 		eCommerceService.registerCustomer("arbieto@mail.com", "arbieto", "Haydee", "DeAlvarado");
 		eCommerceService.registerCustomer("qqqq@mail.com", "qqq", "hahaha", "hohoho");
-
+		
 		eCommerceService.registerProduct("Shampoo", 20.00, 6);
 		eCommerceService.registerProduct("Treatment", 20.00, 10);
 		eCommerceService.registerProduct("Eco Shampoo", 30.00, 100);
 
 		Customer customer = eCommerceService.getCustomerByEmail("arbieto@mail.com");
-
+		System.out.println("Haydee's id:" + customer.getId());
 		ShoppingCart shoppingCart1 = eCommerceService.makeShoppingCart();
 		
 		Order order = new Order(customer, shoppingCart1);
