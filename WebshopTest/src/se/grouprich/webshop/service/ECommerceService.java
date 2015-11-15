@@ -164,6 +164,7 @@ public final class ECommerceService
 
 	public void pay(Customer customer, ShoppingCart shoppingCart) throws PaymentException
 	{
+		//TODO: Lägga till validering. Högre värde än 50 000kr inte accepteras.
 		shoppingCart.pay();
 		Order order = new Order(customer, shoppingCart);
 		orderRepository.create(order);
