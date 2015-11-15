@@ -7,22 +7,26 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
-import java.util.UUID;
 
-import se.grouprich.webshop.model.Customer;
-
-public final class CustomerFileInfo implements FileManager<UUID, Customer>
+public final class ECommerceFileInfo<T> implements FileManager<String, T>
 {
+	private String fileName;
+
+	public ECommerceFileInfo(Class<T> classType)
+	{
+		fileName = (classType.getSimpleName() + "s").toLowerCase();
+	}
+
 	@Override
 	public File getDirectory()
 	{
-		return new File("customers");
+		return new File(fileName);
 	}
 
 	@Override
 	public String getFileName()
 	{
-		return "customers";
+		return fileName;
 	}
 
 	@Override
@@ -31,6 +35,7 @@ public final class CustomerFileInfo implements FileManager<UUID, Customer>
 		return ".data";
 	}
 
+	@Override
 	public File getPath()
 	{
 		return new File(getDirectory(), getFileName() + getFileExtension());
@@ -59,12 +64,12 @@ public final class CustomerFileInfo implements FileManager<UUID, Customer>
 	}
 
 	@Override
-	public void createFile(Map<UUID, Customer> customers)
+	public void createFile(Map<String, T> values)
 	{
 		createDirectory();
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getPath())))
 		{
-			out.writeObject(customers);
+			out.writeObject(values);
 		}
 		catch (IOException e)
 		{
@@ -74,15 +79,15 @@ public final class CustomerFileInfo implements FileManager<UUID, Customer>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readFile(Map<UUID, Customer> customers)
+	public void readFile(Map<String, T> values)
 	{
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(getPath())))
 		{
-			customers.putAll((Map<UUID, Customer>) in.readObject());
+			values.putAll((Map<String, T>) in.readObject());
 		}
 		catch (IOException | ClassNotFoundException e)
 		{
-			throw new RuntimeException("Could not restore customer repository", e);
+			throw new RuntimeException("Could not restore repository", e);
 		}
 	}
 }

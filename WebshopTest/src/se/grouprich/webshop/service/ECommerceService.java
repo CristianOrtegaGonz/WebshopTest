@@ -1,7 +1,5 @@
 package se.grouprich.webshop.service;
 
-import java.util.UUID;
-
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
@@ -15,28 +13,28 @@ import se.grouprich.webshop.repository.Repository;
 
 public final class ECommerceService
 {
-	private final Repository<UUID, Order> orderRepository;
-	private final Repository<UUID, Customer> customerRepository;
-	private final Repository<UUID, Product> productRepository;
+	private final Repository<String, Order> orderRepository;
+	private final Repository<String, Customer> customerRepository;
+	private final Repository<String, Product> productRepository;
 
-	public ECommerceService(Repository<UUID, Order> orderRepository, Repository<UUID, Customer> customerRepository, Repository<UUID, Product> productRepository)
+	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository)
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
 		this.productRepository = productRepository;
 	}
 
-	public Repository<UUID, Order> getOrderRepository()
+	public Repository<String, Order> getOrderRepository()
 	{
 		return orderRepository;
 	}
 
-	public Repository<UUID, Customer> getCustomerRepository()
+	public Repository<String, Customer> getCustomerRepository()
 	{
 		return customerRepository;
 	}
 
-	public Repository<UUID, Product> getProductRepository()
+	public Repository<String, Product> getProductRepository()
 	{
 		return productRepository;
 	}
@@ -72,52 +70,52 @@ public final class ECommerceService
 		return new ShoppingCart();
 	}
 
-	public void deleteCustomer(UUID customerId)
+	public void deleteCustomer(String customerId)
 	{
 		customerRepository.delete(customerId);
 	}
 
-	public void deleteOrder(UUID orderId)
+	public void deleteOrder(String orderId)
 	{
 		orderRepository.delete(orderId);
 	}
 
-	public void deleteProduct(UUID productId)
+	public void deleteProduct(String productId)
 	{
 		productRepository.delete(productId);
 	}
 
-	public void uppdateCustomer(UUID customerId, Customer customer)
+	public void uppdateCustomer(String customerId, Customer customer)
 	{
 		customerRepository.uppdate(customerId, customer);
 	}
 
-	public void uppdateOrder(UUID orderId, Order order)
+	public void uppdateOrder(String orderId, Order order)
 	{
 		orderRepository.uppdate(orderId, order);
 	}
 
-	public void uppdateProduct(UUID productId, Product product)
+	public void uppdateProduct(String productId, Product product)
 	{
 		productRepository.uppdate(productId, product);
 	}
 
-	public Customer getCustomer(UUID customerId) throws RepositoryException
+	public Customer getCustomer(String customerId) throws RepositoryException
 	{
 		return customerRepository.read(customerId);
 	}
 
-	public Order getOrder(UUID orderId) throws RepositoryException
+	public Order getOrder(String orderId) throws RepositoryException
 	{
 		return orderRepository.read(orderId);
 	}
 
-	public Product getProduct(UUID productId) throws RepositoryException
+	public Product getProduct(String productId) throws RepositoryException
 	{
 		return productRepository.read(productId);
 	}
 
-	public void addProductInShoppingCart(ShoppingCart shoppingCart, UUID productId, int orderQuantity) throws RepositoryException, OrderException
+	public void addProductInShoppingCart(ShoppingCart shoppingCart, String productId, int orderQuantity) throws RepositoryException, OrderException
 	{
 		if (productRepository.getAll().containsKey(productId))
 		{
@@ -139,7 +137,7 @@ public final class ECommerceService
 		}
 	}
 
-	public void changeOrderQuantity(ShoppingCart shoppingCart, UUID productId, int orderQuantity) throws RepositoryException, OrderException
+	public void changeOrderQuantity(ShoppingCart shoppingCart, String productId, int orderQuantity) throws RepositoryException, OrderException
 	{
 		if (productRepository.getAll().containsKey(productId))
 		{
@@ -191,11 +189,11 @@ public final class ECommerceService
 		return null;
 	}
 
-	public Order getOrderByCustomerID(UUID customerId) throws RepositoryException
+	public Order getOrderByCustomerID(String customerId) throws RepositoryException
 	{
 		for (Order order : orderRepository.getAll().values())
 		{
-			if (order.getCustomer().getCustomerId().equals(customerId))
+			if (order.getCustomer().getId().equals(customerId))
 			{
 				return order;
 			}

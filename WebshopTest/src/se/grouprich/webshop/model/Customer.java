@@ -1,32 +1,38 @@
 package se.grouprich.webshop.model;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
+import se.grouprich.webshop.idgenerator.Identifiable;
 
-public final class Customer implements Serializable
+public final class Customer implements Serializable, Identifiable<String>
 {
 	private static final long serialVersionUID = 8550124813033398565L;
+	private String customerId;
 	private String email;
 	private String password;
 	private final String firstName;
 	private final String lastName;
-	private final UUID customerId;
-	private boolean isLoggedIn;
 
 	public Customer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
+		customerId = null;
 		this.email = email;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		customerId = UUID.randomUUID();
 	}
-
-	public UUID getCustomerId()
+	
+	@Override
+	public String getId()
 	{
 		return customerId;
+	}
+
+	@Override
+	public void setId(String customerId)
+	{
+		this.customerId = customerId;
 	}
 
 	public String getEmail()
@@ -52,16 +58,6 @@ public final class Customer implements Serializable
 	public String getName()
 	{
 		return firstName + " " + lastName;
-	}
-
-	public boolean isLoggedIn()
-	{
-		return isLoggedIn;
-	}
-
-	public void logIn(String email, String password)
-	{
-		isLoggedIn = true;
 	}
 
 	@Override

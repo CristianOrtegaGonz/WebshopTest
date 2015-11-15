@@ -4,25 +4,33 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import se.grouprich.webshop.exception.PaymentException;
+import se.grouprich.webshop.idgenerator.Identifiable;
 
-public final class Order implements Serializable
+public final class Order implements Serializable, Identifiable<String>
 {
 	private static final long serialVersionUID = 3380539865925002167L;
-	private final UUID orderId;
+	private String orderId;
 	private final ShoppingCart shoppingCart;
 	private Customer customer;
 	private boolean isPayed = false;
 
 	public Order(Customer customer, ShoppingCart shoppingCart)
 	{
-		orderId = UUID.randomUUID();
+		orderId = null;
 		this.customer = customer;
 		this.shoppingCart = shoppingCart;
 	}
-
-	public UUID getOrderId()
+	
+	@Override
+	public String getId()
 	{
 		return orderId;
+	}
+
+	@Override
+	public void setId(String orderId)
+	{
+		this.orderId = orderId;
 	}
 
 	public ShoppingCart getShoppingCart()

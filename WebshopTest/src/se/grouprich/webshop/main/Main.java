@@ -9,9 +9,8 @@ import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
-import se.grouprich.webshop.repository.FileCustomerRepository;
-import se.grouprich.webshop.repository.FileOrderRepository;
-import se.grouprich.webshop.repository.FileProductRepository;
+import se.grouprich.webshop.repository.FileRepository;
+import se.grouprich.webshop.repository.Repository;
 import se.grouprich.webshop.service.ECommerceService;
 
 public final class Main
@@ -20,24 +19,20 @@ public final class Main
 	public static final void main(String[] args)
 			throws CustomerRegistrationException, ProductRegistrationException, RepositoryException, OrderException, PaymentException
 	{
-		FileProductRepository fileProductRepository = new FileProductRepository();
-		FileCustomerRepository fileCustomerRepository = new FileCustomerRepository();
-		FileOrderRepository fileOrderRepository = new FileOrderRepository();
+		Repository<String, Product> fileProductRepository = new FileRepository<Product>(Product.class);
+		Repository<String, Customer>  fileCustomerRepository = new FileRepository<Customer>(Customer.class);
+		Repository<String, Order> fileOrderRepository = new FileRepository<Order>(Order.class);
 		ECommerceService eCommerceService = new ECommerceService(fileOrderRepository, fileCustomerRepository, fileProductRepository);
 
 		eCommerceService.registerCustomer("arbieto@mail.com", "arbieto", "Haydee", "DeAlvarado");
 		eCommerceService.registerCustomer("qqqq@mail.com", "qqq", "hahaha", "hohoho");
-
+		
 		eCommerceService.registerProduct("Shampoo", 20.00, 6);
 		eCommerceService.registerProduct("Treatment", 20.00, 10);
 		eCommerceService.registerProduct("Eco Shampoo", 30.00, 100);
 
 		Customer customer = eCommerceService.getCustomerByEmail("arbieto@mail.com");
-
-		System.out.println("Is " + customer.getName() + " logged in?: " + customer.isLoggedIn());
-
-		System.out.println("Is " + customer.getName() + " logged in?: " + customer.isLoggedIn());
-
+		System.out.println("Haydee's id:" + customer.getId());
 		ShoppingCart shoppingCart1 = eCommerceService.makeShoppingCart();
 		
 		Order order = new Order(customer, shoppingCart1);
@@ -63,7 +58,7 @@ public final class Main
 			System.out.println(product);
 		}
 
-		eCommerceService.uppdateProduct(product1.getProductId(), product1);
+		eCommerceService.uppdateProduct(product1.getId(), product1);
 
 		System.out.println();
 		System.out.println("After update in disk\n-----------------------");
@@ -72,10 +67,10 @@ public final class Main
 			System.out.println(product);
 		}
 
-		eCommerceService.addProductInShoppingCart(shoppingCart1, product1.getProductId(), 5);
-		eCommerceService.addProductInShoppingCart(shoppingCart1, product2.getProductId(), 5);
+		eCommerceService.addProductInShoppingCart(shoppingCart1, product1.getId(), 5);
+		eCommerceService.addProductInShoppingCart(shoppingCart1, product2.getId(), 5);
 
-		eCommerceService.changeOrderQuantity(shoppingCart1, product1.getProductId(), 2);
+		eCommerceService.changeOrderQuantity(shoppingCart1, product1.getId(), 2);
 
 		System.out.println();
 		System.out.println("Total price: " + eCommerceService.calculateTotalPrice(shoppingCart1) + " kr");
@@ -87,7 +82,7 @@ public final class Main
 		System.out.println("Stock quantity of " + product2.getProductName() + ": " + product2.getOrderQuantity());
 		System.out.println("Did " + customer.getName() + " pay?: " + order.isPayed());
 
-		System.out.println("customer: " + eCommerceService.getCustomer(customer.getCustomerId()));
+		System.out.println("customer: " + eCommerceService.getCustomer(customer.getId()));
 
 		System.out.println();
 		System.out.println("Before delete customer\n-----------------------");
@@ -97,7 +92,7 @@ public final class Main
 			System.out.println(customer1);
 		}
 
-		eCommerceService.deleteCustomer(customer.getCustomerId());
+		eCommerceService.deleteCustomer(customer.getId());
 
 		System.out.println();
 		System.out.println("After delete customer\n-----------------------");
