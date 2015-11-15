@@ -8,12 +8,11 @@ import se.grouprich.webshop.exception.CustomerRegistrationException;
 public final class Customer implements Serializable
 {
 	private static final long serialVersionUID = 8550124813033398565L;
+	private final UUID customerId;
 	private String email;
 	private String password;
 	private final String firstName;
 	private final String lastName;
-	private final UUID customerId;
-	private boolean isLoggedIn;
 
 	public Customer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
@@ -52,16 +51,6 @@ public final class Customer implements Serializable
 	public String getName()
 	{
 		return firstName + " " + lastName;
-	}
-
-	public boolean isLoggedIn()
-	{
-		return isLoggedIn;
-	}
-
-	public void logIn(String email, String password)
-	{
-		isLoggedIn = true;
 	}
 
 	@Override
