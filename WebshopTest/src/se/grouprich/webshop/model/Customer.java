@@ -8,7 +8,7 @@ import se.grouprich.webshop.exception.CustomerRegistrationException;
 public final class Customer implements Serializable
 {
 	private static final long serialVersionUID = 8550124813033398565L;
-	private final UUID customerId;
+	private final String customerId;
 	private String email;
 	private String password;
 	private final String firstName;
@@ -20,10 +20,10 @@ public final class Customer implements Serializable
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		customerId = UUID.randomUUID();
+		customerId = UUID.randomUUID().toString();
 	}
 
-	public UUID getCustomerId()
+	public String getCustomerId()
 	{
 		return customerId;
 	}

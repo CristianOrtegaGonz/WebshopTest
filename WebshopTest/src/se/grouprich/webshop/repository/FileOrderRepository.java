@@ -2,20 +2,19 @@ package se.grouprich.webshop.repository;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.repository.file.OrderFileInfo;
 
-public final class FileOrderRepository implements Repository<UUID, Order>
+public final class FileOrderRepository implements Repository<String, Order>
 {
-	private final Map<UUID, Order> orders;
+	private final Map<String, Order> orders;
 	private OrderFileInfo orderFileInfo;
 
 	public FileOrderRepository()
 	{
-		orders = new HashMap<UUID, Order>();
+		orders = new HashMap<String, Order>();
 		orderFileInfo = new OrderFileInfo();
 		if ((orderFileInfo.getPath()).exists())
 		{
@@ -31,7 +30,7 @@ public final class FileOrderRepository implements Repository<UUID, Order>
 	}
 
 	@Override
-	public void delete(UUID orderId)
+	public void delete(String orderId)
 	{
 		if (orders.containsKey(orderId))
 		{
@@ -41,7 +40,7 @@ public final class FileOrderRepository implements Repository<UUID, Order>
 	}
 
 	@Override
-	public void uppdate(UUID orderId, Order order)
+	public void uppdate(String orderId, Order order)
 	{
 		if (orders.containsKey(orderId))
 		{
@@ -51,7 +50,7 @@ public final class FileOrderRepository implements Repository<UUID, Order>
 	}
 
 	@Override
-	public Order read(UUID orderId) throws RepositoryException
+	public Order read(String orderId) throws RepositoryException
 	{
 		if (orders.containsKey(orderId))
 		{
@@ -61,7 +60,7 @@ public final class FileOrderRepository implements Repository<UUID, Order>
 	}
 
 	@Override
-	public Map<UUID, Order> getAll()
+	public Map<String, Order> getAll()
 	{
 		return orders;
 	}

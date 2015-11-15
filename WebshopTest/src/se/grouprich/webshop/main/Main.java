@@ -34,10 +34,6 @@ public final class Main
 
 		Customer customer = eCommerceService.getCustomerByEmail("arbieto@mail.com");
 
-		System.out.println("Is " + customer.getName() + " logged in?: " + customer.isLoggedIn());
-
-		System.out.println("Is " + customer.getName() + " logged in?: " + customer.isLoggedIn());
-
 		ShoppingCart shoppingCart1 = eCommerceService.makeShoppingCart();
 		
 		Order order = new Order(customer, shoppingCart1);

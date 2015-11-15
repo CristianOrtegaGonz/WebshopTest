@@ -2,15 +2,14 @@ package se.grouprich.webshop.repository;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.repository.file.CustomerFileInfo;
 
-public final class FileCustomerRepository implements Repository<UUID, Customer>
+public final class FileCustomerRepository implements Repository<String, Customer>
 {
-	private final Map<UUID, Customer> customers;
+	private final Map<String, Customer> customers;
 	private CustomerFileInfo customerFileInfo;
 
 	public FileCustomerRepository()
@@ -31,7 +30,7 @@ public final class FileCustomerRepository implements Repository<UUID, Customer>
 	}
 
 	@Override
-	public void delete(UUID customerId)
+	public void delete(String customerId)
 	{
 		if (customers.containsKey(customerId))
 		{
@@ -41,7 +40,7 @@ public final class FileCustomerRepository implements Repository<UUID, Customer>
 	}
 
 	@Override
-	public void uppdate(UUID customerId, Customer customer)
+	public void uppdate(String customerId, Customer customer)
 	{
 		if (customers.containsKey(customerId))
 		{
@@ -51,7 +50,7 @@ public final class FileCustomerRepository implements Repository<UUID, Customer>
 	}
 
 	@Override
-	public Customer read(UUID customerId) throws RepositoryException
+	public Customer read(String customerId) throws RepositoryException
 	{
 		if (customers.containsKey(customerId))
 		{
@@ -61,7 +60,7 @@ public final class FileCustomerRepository implements Repository<UUID, Customer>
 	}
 
 	@Override
-	public Map<UUID, Customer> getAll()
+	public Map<String, Customer> getAll()
 	{
 		return customers;
 	}

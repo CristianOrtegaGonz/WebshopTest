@@ -9,7 +9,7 @@ import se.grouprich.webshop.exception.ProductRegistrationException;
 public final class Product implements Serializable
 {
 	private static final long serialVersionUID = 5072511887999675702L;
-	private final UUID productId;
+	private final String productId;
 	private String productName;
 	private double price;
 	private int stockQuantity;
@@ -17,13 +17,13 @@ public final class Product implements Serializable
 
 	public Product(String productName, double price, int stockQuantity) throws ProductRegistrationException
 	{
-		productId = UUID.randomUUID();
+		productId = UUID.randomUUID().toString();
 		this.productName = productName;
 		this.price = price;
 		this.stockQuantity = stockQuantity;
 	}
 
-	public UUID getProductId()
+	public String getProductId()
 	{
 		return productId;
 	}

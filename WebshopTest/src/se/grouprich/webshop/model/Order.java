@@ -8,19 +8,19 @@ import se.grouprich.webshop.exception.PaymentException;
 public final class Order implements Serializable
 {
 	private static final long serialVersionUID = 3380539865925002167L;
-	private final UUID orderId;
+	private final String orderId;
 	private final ShoppingCart shoppingCart;
 	private Customer customer;
 	private boolean isPayed = false;
 
 	public Order(Customer customer, ShoppingCart shoppingCart)
 	{
-		orderId = UUID.randomUUID();
+		orderId = UUID.randomUUID().toString();
 		this.customer = customer;
 		this.shoppingCart = shoppingCart;
 	}
 
-	public UUID getOrderId()
+	public String getOrderId()
 	{
 		return orderId;
 	}

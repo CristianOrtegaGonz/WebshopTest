@@ -7,11 +7,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Map;
-import java.util.UUID;
 
 import se.grouprich.webshop.model.Customer;
 
-public final class CustomerFileInfo implements FileManager<UUID, Customer>
+public final class CustomerFileInfo implements FileManager<String, Customer>
 {
 	@Override
 	public File getDirectory()
@@ -59,7 +58,7 @@ public final class CustomerFileInfo implements FileManager<UUID, Customer>
 	}
 
 	@Override
-	public void createFile(Map<UUID, Customer> customers)
+	public void createFile(Map<String, Customer> customers)
 	{
 		createDirectory();
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getPath())))
@@ -74,11 +73,11 @@ public final class CustomerFileInfo implements FileManager<UUID, Customer>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readFile(Map<UUID, Customer> customers)
+	public void readFile(Map<String, Customer> customers)
 	{
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(getPath())))
 		{
-			customers.putAll((Map<UUID, Customer>) in.readObject());
+			customers.putAll((Map<String, Customer>) in.readObject());
 		}
 		catch (IOException | ClassNotFoundException e)
 		{

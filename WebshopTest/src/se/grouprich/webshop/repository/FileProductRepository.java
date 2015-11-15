@@ -2,15 +2,14 @@ package se.grouprich.webshop.repository;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.repository.file.ProductFileInfo;
 
-public final class FileProductRepository implements Repository<UUID, Product>
+public final class FileProductRepository implements Repository<String, Product>
 {
-	private final Map<UUID, Product> products;
+	private final Map<String, Product> products;
 	private ProductFileInfo productFileInfo;
 
 	public FileProductRepository()
@@ -31,7 +30,7 @@ public final class FileProductRepository implements Repository<UUID, Product>
 	}
 
 	@Override
-	public void delete(UUID productId)
+	public void delete(String productId)
 	{
 		if (products.containsKey(productId))
 		{
@@ -41,7 +40,7 @@ public final class FileProductRepository implements Repository<UUID, Product>
 	}
 
 	@Override
-	public void uppdate(UUID productId, Product product)
+	public void uppdate(String productId, Product product)
 	{
 		if (products.containsKey(productId))
 		{
@@ -51,7 +50,7 @@ public final class FileProductRepository implements Repository<UUID, Product>
 	}
 
 	@Override
-	public Product read(UUID productId) throws RepositoryException
+	public Product read(String productId) throws RepositoryException
 	{
 		if (products.containsKey(productId))
 		{
@@ -61,7 +60,7 @@ public final class FileProductRepository implements Repository<UUID, Product>
 	}
 
 	@Override
-	public Map<UUID, Product> getAll()
+	public Map<String, Product> getAll()
 	{
 		return products;
 	}
