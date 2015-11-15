@@ -153,7 +153,7 @@ public final class ECommerceService
 		}
 	}
 
-	public double calculateTotalPrice(ShoppingCart shoppingCart)
+	public double calculateTotalPrice(ShoppingCart shoppingCart) throws OrderException
 	{
 		double totalPrice = shoppingCart.calculateTotalPrice(shoppingCart.getProducts());
 		return totalPrice;
@@ -201,4 +201,3 @@ public final class ECommerceService
 		return null;
 	}
 }
-//Test
