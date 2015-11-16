@@ -57,11 +57,6 @@ public final class ECommerceService
 		{
 			throw new CustomerRegistrationException("Please check password creating rules");
 		}
-		if (checkPassword(password))
-		{
-			throw new CustomerRegistrationException("Please check password creating rules");
-		}
-
 		Customer customer = new Customer(email, password, firstName, lastName);
 		customerRepository.create(customer);
 	}
