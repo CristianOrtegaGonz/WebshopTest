@@ -41,15 +41,24 @@ public final class ECommerceService
 
 	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
-		for (Customer customer : customerRepository.getAll().values())
+		Customer customer;
+		if (checkPassword(password))
 		{
-			if (customer.getEmail().equals(email))
+			for (Customer customerInMemory : customerRepository.getAll().values())
 			{
-				throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
+				if (customerInMemory.getEmail().equals(email))
+				{
+					throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
+				}
 			}
+
+			customer = new Customer(email, password, firstName, lastName);
+			customerRepository.create(customer);
 		}
-		Customer customer = new Customer(email, password, firstName, lastName);
-		customerRepository.create(customer);
+		else
+		{
+			throw new CustomerRegistrationException("Please check password creating rules");
+		}
 	}
 
 	public void registerProduct(String productName, double price, int stockQuantity) throws ProductRegistrationException, RepositoryException
@@ -200,5 +209,55 @@ public final class ECommerceService
 		}
 		return null;
 	}
+
+	private boolean checkPassword(String password)
+	{
+		if (password == null || password.trim().length() == 0)
+		{
+			return false;
+		}
+
+		boolean digits = false;
+		boolean versal = false;
+		boolean specialCharacter = false;
+		int counterNumbers = 0;
+
+		for (int i = 0; i < password.length(); i++)
+		{
+			// check that in password contains only letters, numbers and
+			// acceptable special characters
+			if (password.substring(i, i + 1).matches("[A-ZÅÖÄa-zåöä\\d\\p{Punct}]+"))
+			{
+				// check for all decimal digits (0-9)
+				if (password.substring(i, i + 1).matches("\\d+"))
+				{
+					counterNumbers++;
+
+					if (counterNumbers >= 2)
+					{
+						digits = true;
+					}
+				}
+
+				// check an uppercase letter
+				if (password.substring(i, i + 1).matches("[A-ZÅÄÖ]+"))
+				{
+					versal = true;
+				}
+
+				// Special characters control
+				if (password.substring(i, i + 1).matches("\\p{Punct}+"))
+				{
+					specialCharacter = true;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return (digits && versal && specialCharacter);
+	}
+
 }
-//Test
+
