@@ -32,8 +32,12 @@ public final class Main
 		eCommerceService.registerProduct("Eco Shampoo", 30.00, 100);
 
 		Customer customer = eCommerceService.getCustomerByEmail("arbieto@mail.com");
-		System.out.println("Haydee's id: " + customer.getId());
+		System.out.println("Haydee's id:" + customer.getId());
 		ShoppingCart shoppingCart1 = eCommerceService.makeShoppingCart();
+		
+		Order order = new Order(customer, shoppingCart1);
+
+		System.out.println("Did " + customer.getName() + " pay?: " + order.isPayed());
 
 		Product product1 = eCommerceService.getProductByName("Shampoo");
 		Product product2 = eCommerceService.getProductByName("Treatment");
@@ -71,12 +75,12 @@ public final class Main
 		System.out.println();
 		System.out.println("Total price: " + eCommerceService.calculateTotalPrice(shoppingCart1) + " kr");
 
-		eCommerceService.pay(customer, shoppingCart1);
-		System.out.println(eCommerceService.getOrders().toString());
+		eCommerceService.pay(order);
 
 		System.out.println();
 		System.out.println("Stock quantity of " + product1.getProductName() + ": " + product1.getStockQuantity());
 		System.out.println("Stock quantity of " + product2.getProductName() + ": " + product2.getOrderQuantity());
+		System.out.println("Did " + customer.getName() + " pay?: " + order.isPayed());
 
 		System.out.println("customer: " + eCommerceService.getCustomer(customer.getId()));
 
@@ -98,7 +102,5 @@ public final class Main
 		}
 
 		System.out.println();
-		
-		System.out.println("get order by customer id: " + eCommerceService.getOrderByCustomerID(customer.getId()));
 	}
 }
