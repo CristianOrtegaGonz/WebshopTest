@@ -1,4 +1,4 @@
-package se.grouprich.webshop.service;
+package se.grouprich.webshop.model;
 
 
 import static org.junit.Assert.*;
@@ -20,6 +20,7 @@ import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.FileRepository;
 import se.grouprich.webshop.repository.Repository;
+import se.grouprich.webshop.service.ECommerceService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OrderTest

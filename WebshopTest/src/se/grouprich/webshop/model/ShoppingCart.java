@@ -50,7 +50,7 @@ public final class ShoppingCart implements Serializable
 		products.add(product);
 		calculateTotalPrice(products);
 	}
-
+	
 	public void deleteOneProduct(Product product) throws OrderException
 	{
 		if (!products.contains(product))

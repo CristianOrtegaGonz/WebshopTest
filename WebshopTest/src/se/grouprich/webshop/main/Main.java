@@ -15,7 +15,7 @@ import se.grouprich.webshop.service.ECommerceService;
 
 public final class Main
 {
-
+	
 	public static final void main(String[] args)
 			throws CustomerRegistrationException, ProductRegistrationException, RepositoryException, OrderException, PaymentException
 	{
