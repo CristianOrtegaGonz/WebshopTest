@@ -223,8 +223,8 @@ public final class ECommerceService
 		}
 		return null;
 	}
-
-	//kankse bör vi inte acceptera svenska tecken för password annars finns det risk att man inte kan logga in med tangentbord som saknar svenska
+	
+//	kankse bör vi inte acceptera svenska tecken för password? För annars finns det risk att man inte kan logga in med tangentbord som saknar svenska
 	private boolean checkPassword(String password)
 	{
 		if (password == null || password.trim().length() == 0)
