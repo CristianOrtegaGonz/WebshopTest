@@ -11,7 +11,6 @@ import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
-import se.grouprich.webshop.repository.FileRepository;
 import se.grouprich.webshop.repository.Repository;
 
 public final class ECommerceService
@@ -50,6 +49,10 @@ public final class ECommerceService
 			{
 				throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
 			}
+		}
+		if (firstName.length() > 30 && lastName.length() > 30)
+		{
+			throw new CustomerRegistrationException("You can't have a name that is longer than 30 characters");
 		}
 		Customer customer = new Customer(email, password, firstName, lastName);
 		customerRepository.create(customer);
@@ -164,7 +167,7 @@ public final class ECommerceService
 
 	public void pay(Customer customer, ShoppingCart shoppingCart) throws PaymentException
 	{
-		//TODO: Lägg till validering. Högre värde än 50 000kr inte accepteras.
+		// TODO: Lägg till validering. Högre värde än 50 000kr inte accepteras.
 		shoppingCart.pay();
 		Order order = new Order(customer, shoppingCart);
 		orderRepository.create(order);

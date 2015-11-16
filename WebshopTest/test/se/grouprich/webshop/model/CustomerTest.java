@@ -15,7 +15,7 @@ public class CustomerTest
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	@InjectMocks
+	@InjectMocks // Customer är inte beroende av någon annan klass så behövs inte annotation @InjectMocks här?
 	Customer customer1, customer2;
 
 	@Test
@@ -34,12 +34,6 @@ public class CustomerTest
 
 		assertEquals("Two customers with same email should be equal", customer1, customer2);
 		assertEquals("Two customers that are equal shoul preoduce same hashCode", customer1.hashCode(), customer2.hashCode());
-	}
-
-	@Test
-	public void customerShouldNotHaveUsernameThatIsLongerThan30Characters() throws CustomerRegistrationException
-	{
-		
 	}
 
 }
