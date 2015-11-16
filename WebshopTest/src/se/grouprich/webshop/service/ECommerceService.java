@@ -42,22 +42,30 @@ public final class ECommerceService
 	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
 		Customer customer;
-		if (checkPassword(password))
+		if (email.length() < 30) // or some other "username"
 		{
-			for (Customer customerInMemory : customerRepository.getAll().values())
-			{
-				if (customerInMemory.getEmail().equals(email))
-				{
-					throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
-				}
-			}
+			if (checkPassword(password))
 
-			customer = new Customer(email, password, firstName, lastName);
-			customerRepository.create(customer);
+			{
+				for (Customer customerInMemory : customerRepository.getAll().values())
+				{
+					if (customerInMemory.getEmail().equals(email))
+					{
+						throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
+					}
+				}
+
+				customer = new Customer(email, password, firstName, lastName);
+				customerRepository.create(customer);
+			}
+			else
+			{
+				throw new CustomerRegistrationException("Please check password creating rules");
+			}
 		}
 		else
 		{
-			throw new CustomerRegistrationException("Please check password creating rules");
+			throw new CustomerRegistrationException("username could not be more than 30 characters");
 		}
 	}
 
@@ -260,4 +268,3 @@ public final class ECommerceService
 	}
 
 }
-
