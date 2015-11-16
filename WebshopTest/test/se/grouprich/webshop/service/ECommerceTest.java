@@ -4,22 +4,17 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
-import se.grouprich.webshop.exception.ProductRegistrationException;
-import se.grouprich.webshop.idgenerator.ECommerceIdGenerator;
-import se.grouprich.webshop.idgenerator.IdGenerator;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
@@ -38,27 +33,31 @@ public class ECommerceTest
 	private Repository<String, Customer> customerRepositoryMock;
 	@Mock(name = "productRepository")
 	private Repository<String, Product> productRepositoryMock;
-	@Mock
-	IdGenerator<String> idGeneratorMock;
+	private ECommerceService eCommerceService;
+	
+//	@InjectMocks <-- funkar inte. Debuggade. Den fattar inte vilken Repository är orderRepository. Det verkar som att den tar den första Mocken i alfabetisk ordning.
+//	private ECommerceService eCommerceService;
 
-	@InjectMocks
-	ECommerceService eCommerceService;
+	@Before
+	public void setup()
+	{
+		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock);
+	}
 
 	@Test
-	public void customerShouldNotHaveUsernameThatIsLongerThan30Characters() throws CustomerRegistrationException
+	public void customerShouldNotHaveEmailAddressThatIsLongerThan30Characters() throws CustomerRegistrationException
 	{
 		exception.expect(CustomerRegistrationException.class);
-		exception.expectMessage(equalTo("You can't have a name that is longer than 30 characters"));
+		exception.expectMessage(equalTo("Email address that is longer than 30 characters is not allowed"));
 
-		String email = "aa@aa.com";
+		String email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
 		String password = "secret";
-		String firstName = "Haydeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
-		String lastName = "Arbietoooooooooooooooooooooooooooooooo";
+		String firstName = "Haydee";
+		String lastName = "Arbieto";
 
 		eCommerceService.registerCustomer(email, password, firstName, lastName);
 
-		assertTrue(firstName.length() > 30);
-		assertTrue(lastName.length() > 30);
+		assertTrue(email.length() > 30);
 	}
 
 	@Test
@@ -80,10 +79,8 @@ public class ECommerceTest
 		Customer customer = new Customer("aa@aa.com", "secret", "Haydee", "Arbeito");
 		ShoppingCart shoppingCart = new ShoppingCart();
 		Order order = new Order(customer, shoppingCart);
-		when(orderRepositoryMock.create(order)).thenReturn(true);
 		eCommerceService.pay(order);
-		
-		assertTrue(orderRepositoryMock.create(order));
+
 		verify(orderRepositoryMock).create(order);
 	}
 }

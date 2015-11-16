@@ -51,11 +51,12 @@ public final class ECommerceService
 		}
 		if (email.length() > 30)
 		{
-			throw new CustomerRegistrationException("You can't have a name that is longer than 30 characters");
+			throw new CustomerRegistrationException("Email address that is longer than 30 characters is not allowed");
 		}		
 		if (!checkPassword(password))
 		{
-			throw new CustomerRegistrationException("Please check password creating rules");
+//			ändrat message så att den visar vad som ska fixas tydligare
+			throw new CustomerRegistrationException("Password must have at least an uppercase letter, two digits and a special character such as !@#$%^&*(){}[]");
 		}
 		Customer customer = new Customer(email, password, firstName, lastName);
 		customerRepository.create(customer);
@@ -223,6 +224,7 @@ public final class ECommerceService
 		return null;
 	}
 
+	//kankse bör vi inte acceptera svenska tecken för password annars finns det risk att man inte kan logga in med tangentbord som saknar svenska
 	private boolean checkPassword(String password)
 	{
 		if (password == null || password.trim().length() == 0)

@@ -26,17 +26,12 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		}
 	}
 
-	public boolean create(T value)
+	public void create(T value)
 	{
 		String id = idGenerator.getGeneratedId();
 		value.setId(id);
-		if (value.getId() != null)
-		{
 			values.put(id, value);
 			fileInfo.createFile(values);
-			return true;
-		}
-		return false;
 	}
 
 	public void delete(String id)
