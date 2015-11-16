@@ -165,8 +165,12 @@ public final class ECommerceService
 		return totalPrice;
 	}
 
-	public void pay(Customer customer, ShoppingCart shoppingCart) throws PaymentException
+	public void pay(Customer customer, ShoppingCart shoppingCart) throws PaymentException, OrderException
 	{
+		if (shoppingCart.getProducts().isEmpty())
+		{
+			throw new OrderException("Shopping cart is empty");
+		}
 		// TODO: Lägg till validering. Högre värde än 50 000kr inte accepteras.
 		shoppingCart.pay();
 		Order order = new Order(customer, shoppingCart);
