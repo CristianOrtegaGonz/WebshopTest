@@ -15,7 +15,6 @@ import se.grouprich.webshop.service.ECommerceService;
 
 public final class Main
 {
-
 	public static final void main(String[] args)
 			throws CustomerRegistrationException, ProductRegistrationException, RepositoryException, OrderException, PaymentException
 	{
@@ -73,6 +72,7 @@ public final class Main
 		eCommerceService.changeOrderQuantity(shoppingCart1, product1.getId(), 2);
 
 		System.out.println();
+
 		System.out.println("Total price: " + eCommerceService.calculateTotalPrice(shoppingCart1) + " kr");	
 		
 		eCommerceService.pay(eCommerceService.checkOut(customer, shoppingCart1));

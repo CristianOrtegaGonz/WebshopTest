@@ -52,6 +52,10 @@ public final class ECommerceService
 		if (email.length() > 30)
 		{
 			throw new CustomerRegistrationException("You can't have a name that is longer than 30 characters");
+		}		
+		if (!checkPassword(password))
+		{
+			throw new CustomerRegistrationException("Please check password creating rules");
 		}
 		if (checkPassword(password))
 		{
