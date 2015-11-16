@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.grouprich.webshop.exception.OrderException;
-import se.grouprich.webshop.exception.PaymentException;
 
 public final class ShoppingCart implements Serializable
 {
@@ -57,14 +56,6 @@ public final class ShoppingCart implements Serializable
 	public void emptyShoppingCart(List<Product> products)
 	{
 		products.removeAll(products);
-	}
-	
-	public void pay() throws PaymentException
-	{
-		for (Product product : products)
-		{
-			product.setStockQuantity(product.getStockQuantity() - product.getOrderQuantity());
-		}
 	}
 
 	@Override

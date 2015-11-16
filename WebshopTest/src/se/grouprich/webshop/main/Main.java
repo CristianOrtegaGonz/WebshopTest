@@ -71,8 +71,11 @@ public final class Main
 		System.out.println();
 		System.out.println("Total price: " + eCommerceService.calculateTotalPrice(shoppingCart1) + " kr");
 
-		eCommerceService.pay(customer, shoppingCart1);
-		System.out.println(eCommerceService.getOrders().toString());
+
+		eCommerceService.pay(eCommerceService.checkOut(customer, shoppingCart1));
+		
+		
+		System.out.println("Order list: " + eCommerceService.getOrders().toString());
 
 		System.out.println();
 		System.out.println("Stock quantity of " + product1.getProductName() + ": " + product1.getStockQuantity());

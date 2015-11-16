@@ -2,6 +2,9 @@ package se.grouprich.webshop.service;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,6 +17,9 @@ import org.mockito.runners.MockitoJUnitRunner;
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
+import se.grouprich.webshop.exception.ProductRegistrationException;
+import se.grouprich.webshop.idgenerator.ECommerceIdGenerator;
+import se.grouprich.webshop.idgenerator.IdGenerator;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
@@ -32,6 +38,8 @@ public class ECommerceTest
 	private Repository<String, Customer> customerRepositoryMock;
 	@Mock(name = "productRepository")
 	private Repository<String, Product> productRepositoryMock;
+	@Mock
+	IdGenerator<String> idGeneratorMock;
 
 	@InjectMocks
 	ECommerceService eCommerceService;
@@ -58,11 +66,24 @@ public class ECommerceTest
 	{
 		exception.expect(OrderException.class);
 		exception.expectMessage(equalTo("Shopping cart is empty"));
-		
+
 		Customer customer = new Customer("aa@aa.com", "secret", "Haydee", "Arbeito");
 		ShoppingCart shoppingCart = new ShoppingCart();
-		eCommerceService.pay(customer, shoppingCart);
-		
+		eCommerceService.checkOut(customer, shoppingCart);
+
 		assertTrue(shoppingCart.getProducts().isEmpty());
+	}
+
+	@Test
+	public void orderShouldHaveGotItsIdAssigned() throws CustomerRegistrationException, PaymentException, OrderException
+	{
+		Customer customer = new Customer("aa@aa.com", "secret", "Haydee", "Arbeito");
+		ShoppingCart shoppingCart = new ShoppingCart();
+		Order order = new Order(customer, shoppingCart);
+		when(orderRepositoryMock.create(order)).thenReturn(true);
+		eCommerceService.pay(order);
+		
+		assertTrue(orderRepositoryMock.create(order));
+		verify(orderRepositoryMock).create(order);
 	}
 }

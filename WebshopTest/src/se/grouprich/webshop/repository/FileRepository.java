@@ -26,12 +26,17 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		}
 	}
 
-	public void create(T value)
+	public boolean create(T value)
 	{
 		String id = idGenerator.getGeneratedId();
 		value.setId(id);
-		values.put(id, value);
-		fileInfo.createFile(values);
+		if (value.getId() != null)
+		{
+			values.put(id, value);
+			fileInfo.createFile(values);
+			return true;
+		}
+		return false;
 	}
 
 	public void delete(String id)
@@ -42,7 +47,7 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		}
 		fileInfo.createFile(values);
 	}
-	
+
 	public void uppdate(String id, T value)
 	{
 		if (values.containsKey(id))
@@ -51,7 +56,7 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		}
 		fileInfo.createFile(values);
 	}
-	
+
 	public T read(String id) throws RepositoryException
 	{
 		if (values.containsKey(id))
@@ -60,10 +65,10 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		}
 		throw new RepositoryException("This id doesn't exists");
 	}
-	
+
 	@Override
 	public Map<String, T> getAll()
 	{
 		return values;
-	}	
+	}
 }

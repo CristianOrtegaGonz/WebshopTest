@@ -2,6 +2,7 @@ package se.grouprich.webshop.model;
 
 import java.io.Serializable;
 
+import se.grouprich.webshop.exception.PaymentException;
 import se.grouprich.webshop.idgenerator.Identifiable;
 
 public final class Order implements Serializable, Identifiable<String>
@@ -10,12 +11,14 @@ public final class Order implements Serializable, Identifiable<String>
 	private String orderId;
 	private final ShoppingCart shoppingCart;
 	private Customer customer;
+	private boolean isPayed;
 
 	public Order(Customer customer, ShoppingCart shoppingCart)
 	{
 		orderId = null;
 		this.customer = customer;
 		this.shoppingCart = shoppingCart;
+		isPayed = false;
 	}
 	
 	@Override
@@ -38,6 +41,20 @@ public final class Order implements Serializable, Identifiable<String>
 	public Customer getCustomer()
 	{
 		return customer;
+	}
+	
+	public boolean isPayed()
+	{
+		return isPayed;
+	}
+	
+	public void pay() throws PaymentException
+	{
+		isPayed = true;
+		for (Product product : shoppingCart.getProducts())
+		{
+			product.setStockQuantity(product.getStockQuantity() - product.getOrderQuantity());
+		}
 	}
 
 	@Override
@@ -69,6 +86,6 @@ public final class Order implements Serializable, Identifiable<String>
 	@Override
 	public String toString()
 	{
-		return "Order [orderId=" + orderId + ", shoppingCart=" + shoppingCart + ", customer=" + customer + "]";
+		return "Order [orderId=" + orderId + ", shoppingCart=" + shoppingCart + ", customer=" + customer + ", isPayed=" + isPayed + "]";
 	}
 }

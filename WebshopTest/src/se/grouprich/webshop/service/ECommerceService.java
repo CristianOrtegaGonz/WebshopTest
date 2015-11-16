@@ -54,6 +54,8 @@ public final class ECommerceService
 		{
 			throw new CustomerRegistrationException("You can't have a name that is longer than 30 characters");
 		}
+		
+		
 		Customer customer = new Customer(email, password, firstName, lastName);
 		customerRepository.create(customer);
 	}
@@ -165,15 +167,24 @@ public final class ECommerceService
 		return totalPrice;
 	}
 
-	public void pay(Customer customer, ShoppingCart shoppingCart) throws PaymentException, OrderException
+	// TODO: dela upp steg. pay() coh goToCheckOut() metoder
+	public Order checkOut(Customer customer, ShoppingCart shoppingCart) throws OrderException
 	{
 		if (shoppingCart.getProducts().isEmpty())
 		{
 			throw new OrderException("Shopping cart is empty");
 		}
 		// TODO: Lägg till validering. Högre värde än 50 000kr inte accepteras.
-		shoppingCart.pay();
-		Order order = new Order(customer, shoppingCart);
+		return new Order(customer, shoppingCart);
+	}
+
+	public void pay(Order order) throws PaymentException
+	{
+		if (order.getShoppingCart().getTotalPrice() > 50000.00)
+		{
+			throw new PaymentException("We can not accept the total price exceeding SEK 50,000");
+		}
+		order.pay();
 		orderRepository.create(order);
 	}
 
