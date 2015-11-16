@@ -22,6 +22,7 @@ import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
 
 @RunWith(MockitoJUnitRunner.class)
+// Ska klassen heta ECommerceServiceTest för tydlighets skull?
 public class ECommerceTest
 {
 	@Rule
