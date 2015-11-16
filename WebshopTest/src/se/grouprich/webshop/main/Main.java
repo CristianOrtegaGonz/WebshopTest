@@ -73,13 +73,11 @@ public final class Main
 		eCommerceService.changeOrderQuantity(shoppingCart1, product1.getId(), 2);
 
 		System.out.println();
-		System.out.println("Total price: " + eCommerceService.calculateTotalPrice(shoppingCart1) + " kr");
-
+		System.out.println("Total price: " + eCommerceService.calculateTotalPrice(shoppingCart1) + " kr");	
+		
 		eCommerceService.pay(eCommerceService.checkOut(customer, shoppingCart1));
 		
-		
-//		System.out.println("Order list: " + eCommerceService.getOrders().toString());
-		
+		System.out.println("Order list: " + fileOrderRepository.getAll().toString());
 
 		System.out.println();
 		System.out.println("Stock quantity of " + product1.getProductName() + ": " + product1.getStockQuantity());

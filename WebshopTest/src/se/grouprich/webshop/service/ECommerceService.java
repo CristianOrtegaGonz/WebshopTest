@@ -39,7 +39,7 @@ public final class ECommerceService
 		return productRepository;
 	}
 
-	//fixat så att det är lättare att läsa
+	// fixat så att det är lättare att läsa
 	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
 		for (Customer customer : customerRepository.getAll().values())
@@ -57,6 +57,7 @@ public final class ECommerceService
 		{
 			throw new CustomerRegistrationException("Please check password creating rules");
 		}
+
 		Customer customer = new Customer(email, password, firstName, lastName);
 		customerRepository.create(customer);
 	}

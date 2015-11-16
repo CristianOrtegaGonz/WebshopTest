@@ -42,6 +42,11 @@ public final class Order implements Serializable, Identifiable<String>
 	{
 		return customer;
 	}
+
+	public boolean isPayed()
+	{
+		return isPayed;
+	}
 	
 	public void pay() throws PaymentException
 	{
@@ -50,11 +55,6 @@ public final class Order implements Serializable, Identifiable<String>
 		{
 			product.setStockQuantity(product.getStockQuantity() - product.getOrderQuantity());
 		}
-	}
-	
-	public boolean isPayed()
-	{
-		return isPayed;
 	}
 
 	@Override
