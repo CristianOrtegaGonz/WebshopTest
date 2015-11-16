@@ -39,34 +39,26 @@ public final class ECommerceService
 		return productRepository;
 	}
 
+	//fixat så att det är lättare att läsa
 	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
-		Customer customer;
-		if (email.length() < 30) // or some other "username"
+		for (Customer customer : customerRepository.getAll().values())
 		{
-			if (checkPassword(password))
-
+			if (customer.getEmail().equals(email))
 			{
-				for (Customer customerInMemory : customerRepository.getAll().values())
-				{
-					if (customerInMemory.getEmail().equals(email))
-					{
-						throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
-					}
-				}
-
-				customer = new Customer(email, password, firstName, lastName);
-				customerRepository.create(customer);
-			}
-			else
-			{
-				throw new CustomerRegistrationException("Please check password creating rules");
+				throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
 			}
 		}
-		else
+		if (email.length() > 30)
 		{
-			throw new CustomerRegistrationException("username could not be more than 30 characters");
+			throw new CustomerRegistrationException("You can't have a name that is longer than 30 characters");
 		}
+		if (checkPassword(password))
+		{
+			throw new CustomerRegistrationException("Please check password creating rules");
+		}
+		Customer customer = new Customer(email, password, firstName, lastName);
+		customerRepository.create(customer);
 	}
 
 	public void registerProduct(String productName, double price, int stockQuantity) throws ProductRegistrationException, RepositoryException
@@ -176,8 +168,21 @@ public final class ECommerceService
 		return totalPrice;
 	}
 
+	public Order checkOut(Customer customer, ShoppingCart shoppingCart) throws OrderException
+	{
+		if (shoppingCart.getProducts().isEmpty())
+		{
+			throw new OrderException("Shopping cart is empty");
+		}
+		return new Order(customer, shoppingCart);
+	}
+
 	public void pay(Order order) throws PaymentException
 	{
+		if (order.getShoppingCart().getTotalPrice() > 50000.00)
+		{
+			throw new PaymentException("We can not accept the total price exceeding SEK 50,000");
+		}
 		order.pay();
 		orderRepository.create(order);
 	}
@@ -266,5 +271,4 @@ public final class ECommerceService
 		}
 		return (digits && versal && specialCharacter);
 	}
-
 }

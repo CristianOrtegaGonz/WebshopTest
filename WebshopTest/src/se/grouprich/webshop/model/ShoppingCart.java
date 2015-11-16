@@ -28,19 +28,13 @@ public final class ShoppingCart implements Serializable
 		return totalPrice;
 	}
 
-	public double calculateTotalPrice(List<Product> products) throws OrderException
+	public double calculateTotalPrice(List<Product> products)
 	{
 		totalPrice = 0;
 		for (Product product : products)
 		{
 			totalPrice = totalPrice + product.getPrice() * product.getOrderQuantity();
 		}
-
-		if (this.totalPrice > 50000)	
-		{
-			throw new OrderException("An Order can not be over 50000");
-		}
-		
 		return totalPrice;
 	}
 	
