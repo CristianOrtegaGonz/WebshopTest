@@ -42,7 +42,7 @@ public final class Order implements Serializable, Identifiable<String>
 	{
 		return customer;
 	}
-	
+
 	public boolean isPayed()
 	{
 		return isPayed;

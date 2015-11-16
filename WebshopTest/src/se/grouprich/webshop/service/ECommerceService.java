@@ -1,7 +1,5 @@
 package se.grouprich.webshop.service;
 
-import java.util.Map;
-
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
@@ -41,6 +39,7 @@ public final class ECommerceService
 		return productRepository;
 	}
 
+	// fixat så att det är lättare att läsa
 	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
 		for (Customer customer : customerRepository.getAll().values())
@@ -50,12 +49,14 @@ public final class ECommerceService
 				throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
 			}
 		}
-		if (firstName.length() > 30 && lastName.length() > 30)
+		if (email.length() > 30)
 		{
 			throw new CustomerRegistrationException("You can't have a name that is longer than 30 characters");
+		}		
+		if (!checkPassword(password))
+		{
+			throw new CustomerRegistrationException("Please check password creating rules");
 		}
-		
-		
 		Customer customer = new Customer(email, password, firstName, lastName);
 		customerRepository.create(customer);
 	}
@@ -167,14 +168,12 @@ public final class ECommerceService
 		return totalPrice;
 	}
 
-	// TODO: dela upp steg. pay() coh goToCheckOut() metoder
 	public Order checkOut(Customer customer, ShoppingCart shoppingCart) throws OrderException
 	{
 		if (shoppingCart.getProducts().isEmpty())
 		{
 			throw new OrderException("Shopping cart is empty");
 		}
-		// TODO: Lägg till validering. Högre värde än 50 000kr inte accepteras.
 		return new Order(customer, shoppingCart);
 	}
 
@@ -224,8 +223,52 @@ public final class ECommerceService
 		return null;
 	}
 
-	public Map<String, Order> getOrders()
+	private boolean checkPassword(String password)
 	{
-		return orderRepository.getAll();
+		if (password == null || password.trim().length() == 0)
+		{
+			return false;
+		}
+
+		boolean digits = false;
+		boolean versal = false;
+		boolean specialCharacter = false;
+		int counterNumbers = 0;
+
+		for (int i = 0; i < password.length(); i++)
+		{
+			// check that in password contains only letters, numbers and
+			// acceptable special characters
+			if (password.substring(i, i + 1).matches("[A-ZÅÖÄa-zåöä\\d\\p{Punct}]+"))
+			{
+				// check for all decimal digits (0-9)
+				if (password.substring(i, i + 1).matches("\\d+"))
+				{
+					counterNumbers++;
+
+					if (counterNumbers >= 2)
+					{
+						digits = true;
+					}
+				}
+
+				// check an uppercase letter
+				if (password.substring(i, i + 1).matches("[A-ZÅÄÖ]+"))
+				{
+					versal = true;
+				}
+
+				// Special characters control
+				if (password.substring(i, i + 1).matches("\\p{Punct}+"))
+				{
+					specialCharacter = true;
+				}
+			}
+			else
+			{
+				return false;
+			}
+		}
+		return (digits && versal && specialCharacter);
 	}
 }

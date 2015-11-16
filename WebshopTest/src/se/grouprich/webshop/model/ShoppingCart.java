@@ -37,8 +37,8 @@ public final class ShoppingCart implements Serializable
 		}
 		return totalPrice;
 	}
-
-	public void addProductInShoppingCart(Product product)
+	
+	public void addProductInShoppingCart(Product product) throws OrderException
 	{
 		products.add(product);
 		calculateTotalPrice(products);
