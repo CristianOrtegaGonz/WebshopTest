@@ -30,8 +30,8 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	{
 		String id = idGenerator.getGeneratedId();
 		value.setId(id);
-		values.put(id, value);
-		fileInfo.createFile(values);
+			values.put(id, value);
+			fileInfo.createFile(values);
 	}
 
 	public void delete(String id)
