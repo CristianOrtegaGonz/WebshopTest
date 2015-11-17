@@ -13,9 +13,9 @@ public final class Order implements Serializable, Identifiable<String>
 	private Customer customer;
 	private boolean isPayed;
 
-	public Order(Customer customer, ShoppingCart shoppingCart)
+	public Order(String orderId, Customer customer, ShoppingCart shoppingCart)
 	{
-		orderId = null;
+		this.orderId = orderId;
 		this.customer = customer;
 		this.shoppingCart = shoppingCart;
 		isPayed = false;

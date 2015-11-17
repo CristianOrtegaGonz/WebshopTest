@@ -15,6 +15,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
+import se.grouprich.webshop.exception.ProductRegistrationException;
+import se.grouprich.webshop.idgenerator.IdGenerator;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
@@ -34,7 +36,15 @@ public class ECommerceTest
 	private Repository<String, Customer> customerRepositoryMock;
 	@Mock(name = "productRepository")
 	private Repository<String, Product> productRepositoryMock;
+	@Mock
+	private IdGenerator<String> idGeneratorMock;
 	private ECommerceService eCommerceService;
+	private String email = "aa@aa.com";
+	private String password = "secret";
+	private String firstName = "Haydee";
+	private String lastName = "Arbeito";
+	private String customerId = "1000";
+	private String orderId = "1002";
 	
 //	@InjectMocks <-- funkar inte. Debuggade. Den fattar inte vilken Repository är orderRepository. Det verkar som att den tar den första Mocken i alfabetisk ordning.
 //	private ECommerceService eCommerceService;
@@ -42,7 +52,7 @@ public class ECommerceTest
 	@Before
 	public void setup()
 	{
-		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock);
+		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock, idGeneratorMock);
 	}
 
 	@Test
@@ -52,9 +62,6 @@ public class ECommerceTest
 		exception.expectMessage(equalTo("Email address that is longer than 30 characters is not allowed"));
 
 		String email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
-		String password = "secret";
-		String firstName = "Haydee";
-		String lastName = "Arbieto";
 
 		eCommerceService.registerCustomer(email, password, firstName, lastName);
 
@@ -67,7 +74,7 @@ public class ECommerceTest
 		exception.expect(OrderException.class);
 		exception.expectMessage(equalTo("Shopping cart is empty"));
 
-		Customer customer = new Customer("aa@aa.com", "secret", "Haydee", "Arbeito");
+		Customer customer = new Customer(customerId, email, password, firstName, lastName);
 		ShoppingCart shoppingCart = new ShoppingCart();
 		eCommerceService.checkOut(customer, shoppingCart);
 
@@ -76,12 +83,32 @@ public class ECommerceTest
 
 	@Test
 	public void orderShouldHaveGotItsIdAssigned() throws CustomerRegistrationException, PaymentException, OrderException
-	{
-		Customer customer = new Customer("aa@aa.com", "secret", "Haydee", "Arbeito");
+	{		
+		Customer customer = new Customer(null, null, null, null, null);
 		ShoppingCart shoppingCart = new ShoppingCart();
-		Order order = new Order(customer, shoppingCart);
+		Order order = new Order(orderId, customer, shoppingCart);
+		when(idGeneratorMock.getGeneratedId()).thenReturn(orderId);
+		
 		eCommerceService.pay(order);
+		
+		assertEquals(orderId, order.getId());
 
-		verify(orderRepositoryMock).create(order);
+		verify(idGeneratorMock).getGeneratedId();
+	}
+	
+//	fixat denna metod efter ändringar
+	@Test
+	public void totalPriceShouldNotExceedSEK50000() throws ProductRegistrationException, OrderException, PaymentException, CustomerRegistrationException
+	{
+		exception.expect(PaymentException.class);
+		exception.expectMessage(equalTo("We can not accept the total price exceeding SEK 50,000"));
+
+		ShoppingCart shoppingCart = new ShoppingCart();
+		shoppingCart.setTotalPrice(50001.00);
+		Order order = new Order(null, null, shoppingCart);
+		
+		eCommerceService.pay(order);
+		
+		assertTrue(shoppingCart.getTotalPrice() > 50000);
 	}
 }

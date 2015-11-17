@@ -15,7 +15,6 @@ public final class ShoppingCart implements Serializable
 	public ShoppingCart()
 	{
 		products = new ArrayList<>();
-		totalPrice = 0;
 	}
 
 	public List<Product> getProducts()
@@ -26,6 +25,11 @@ public final class ShoppingCart implements Serializable
 	public double getTotalPrice()
 	{
 		return totalPrice;
+	}
+	
+	public void setTotalPrice(double totalPrice)
+	{
+		this.totalPrice = totalPrice;
 	}
 
 	public double calculateTotalPrice(List<Product> products)

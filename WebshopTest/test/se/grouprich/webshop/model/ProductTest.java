@@ -1,4 +1,4 @@
-package se.grouprich.webshop.service;
+package se.grouprich.webshop.model;
 
 import static org.junit.Assert.*;
 

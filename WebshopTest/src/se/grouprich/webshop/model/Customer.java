@@ -14,9 +14,9 @@ public final class Customer implements Serializable, Identifiable<String>
 	private final String firstName;
 	private final String lastName;
 
-	public Customer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
+	public Customer(String customerId, String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
-		customerId = null;
+		this.customerId = customerId;
 		this.email = email;
 		this.password = password;
 		this.firstName = firstName;
