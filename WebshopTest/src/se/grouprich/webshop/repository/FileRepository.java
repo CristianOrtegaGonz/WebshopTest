@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import se.grouprich.webshop.exception.RepositoryException;
-import se.grouprich.webshop.idgenerator.ECommerceIdGenerator;
 import se.grouprich.webshop.idgenerator.Identifiable;
 import se.grouprich.webshop.repository.file.ECommerceFileInfo;
 import se.grouprich.webshop.repository.file.FileManager;
@@ -13,13 +12,11 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 {
 	private final Map<String, T> values;
 	private final FileManager<String, T> fileInfo;
-	private final ECommerceIdGenerator idGenerator;
 
 	public FileRepository(Class<T> classType)
 	{
 		values = new HashMap<>();
 		fileInfo = new ECommerceFileInfo<>(classType);
-		idGenerator = new ECommerceIdGenerator();
 		if ((fileInfo.getPath()).exists())
 		{
 			fileInfo.readFile(values);
@@ -28,10 +25,8 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 
 	public void create(T value)
 	{
-		String id = idGenerator.getGeneratedId();
-		value.setId(id);
-			values.put(id, value);
-			fileInfo.createFile(values);
+		values.put(value.getId(), value);
+		fileInfo.createFile(values);
 	}
 
 	public void delete(String id)

@@ -5,6 +5,7 @@ import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
 import se.grouprich.webshop.exception.ProductRegistrationException;
 import se.grouprich.webshop.exception.RepositoryException;
+import se.grouprich.webshop.idgenerator.IdGenerator;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
@@ -16,12 +17,14 @@ public final class ECommerceService
 	private final Repository<String, Order> orderRepository;
 	private final Repository<String, Customer> customerRepository;
 	private final Repository<String, Product> productRepository;
+	private final IdGenerator<String> idGenerator;
 
-	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository)
+	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository, IdGenerator<String> idGenerator)
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
 		this.productRepository = productRepository;
+		this.idGenerator = idGenerator;
 	}
 
 	public Repository<String, Order> getOrderRepository()
@@ -38,6 +41,11 @@ public final class ECommerceService
 	{
 		return productRepository;
 	}
+	
+	public IdGenerator<String> getIdGenerator()
+	{
+		return idGenerator;
+	}
 
 	// fixat så att det är lättare att läsa
 	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
@@ -52,13 +60,14 @@ public final class ECommerceService
 		if (email.length() > 30)
 		{
 			throw new CustomerRegistrationException("Email address that is longer than 30 characters is not allowed");
-		}			
+		}		
 		if (!checkPassword(password))
 		{
 //			ändrat message så att den visar vad som ska fixas tydligare
 			throw new CustomerRegistrationException("Password must have at least an uppercase letter, two digits and a special character such as !@#$%^&*(){}[]");
 		}
-		Customer customer = new Customer(email, password, firstName, lastName);
+		String id = idGenerator.getGeneratedId();
+		Customer customer = new Customer(id, email, password, firstName, lastName);
 		customerRepository.create(customer);
 	}
 
@@ -66,7 +75,8 @@ public final class ECommerceService
 	{
 		if (getProductByName(productName) == null)
 		{
-			Product product = new Product(productName, price, stockQuantity);
+			String id = idGenerator.getGeneratedId();
+			Product product = new Product(id, productName, price, stockQuantity);
 			productRepository.create(product);
 		}
 		else
@@ -175,7 +185,8 @@ public final class ECommerceService
 		{
 			throw new OrderException("Shopping cart is empty");
 		}
-		return new Order(customer, shoppingCart);
+		String id = null;
+		return new Order(id, customer, shoppingCart);
 	}
 
 	public void pay(Order order) throws PaymentException
@@ -185,6 +196,8 @@ public final class ECommerceService
 			throw new PaymentException("We can not accept the total price exceeding SEK 50,000");
 		}
 		order.pay();
+		String id = idGenerator.getGeneratedId();
+		order.setId(id);
 		orderRepository.create(order);
 	}
 

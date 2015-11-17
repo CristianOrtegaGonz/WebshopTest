@@ -5,6 +5,8 @@ import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
 import se.grouprich.webshop.exception.ProductRegistrationException;
 import se.grouprich.webshop.exception.RepositoryException;
+import se.grouprich.webshop.idgenerator.ECommerceIdGenerator;
+import se.grouprich.webshop.idgenerator.IdGenerator;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
@@ -21,10 +23,11 @@ public final class Main
 		Repository<String, Product> fileProductRepository = new FileRepository<Product>(Product.class);
 		Repository<String, Customer>  fileCustomerRepository = new FileRepository<Customer>(Customer.class);
 		Repository<String, Order> fileOrderRepository = new FileRepository<Order>(Order.class);
-		ECommerceService eCommerceService = new ECommerceService(fileOrderRepository, fileCustomerRepository, fileProductRepository);
+		IdGenerator<String> idGenerator = new ECommerceIdGenerator();
+		ECommerceService eCommerceService = new ECommerceService(fileOrderRepository, fileCustomerRepository, fileProductRepository, idGenerator);
 
-		eCommerceService.registerCustomer("arbieto@mail.com", "arbieto", "Haydee", "DeAlvarado");
-		eCommerceService.registerCustomer("qqqq@mail.com", "qqq", "hahaha", "hohoho");
+		eCommerceService.registerCustomer("arbieto@mail.com", "Arbieto12*", "Haydee", "DeAlvarado");
+		eCommerceService.registerCustomer("qqqq@mail.com", "Q#qq32", "hahaha", "hohoho");
 		
 		eCommerceService.registerProduct("Shampoo", 20.00, 6);
 		eCommerceService.registerProduct("Treatment", 20.00, 10);
@@ -33,10 +36,6 @@ public final class Main
 		Customer customer = eCommerceService.getCustomerByEmail("arbieto@mail.com");
 		System.out.println("Haydee's id:" + customer.getId());
 		ShoppingCart shoppingCart1 = eCommerceService.makeShoppingCart();
-		
-		Order order = new Order(customer, shoppingCart1);
-
-		System.out.println("Did " + customer.getName() + " pay?: " + order.isPayed());
 
 		Product product1 = eCommerceService.getProductByName("Shampoo");
 		Product product2 = eCommerceService.getProductByName("Treatment");
@@ -82,7 +81,6 @@ public final class Main
 		System.out.println();
 		System.out.println("Stock quantity of " + product1.getProductName() + ": " + product1.getStockQuantity());
 		System.out.println("Stock quantity of " + product2.getProductName() + ": " + product2.getOrderQuantity());
-		System.out.println("Did " + customer.getName() + " pay?: " + order.isPayed());
 
 		System.out.println("customer: " + eCommerceService.getCustomer(customer.getId()));
 

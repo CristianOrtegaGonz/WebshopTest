@@ -15,9 +15,9 @@ public final class Product implements Serializable, Identifiable<String>
 	private int stockQuantity;
 	private int orderQuantity;
 
-	public Product(String productName, double price, int stockQuantity) throws ProductRegistrationException
+	public Product(String productId, String productName, double price, int stockQuantity) throws ProductRegistrationException
 	{
-		productId = null;
+		this.productId = productId;
 		this.productName = productName;
 		this.price = price;
 		this.stockQuantity = stockQuantity;
