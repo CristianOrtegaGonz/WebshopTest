@@ -36,6 +36,6 @@ public class CustomerTest
 		customer2 = new Customer("1001", "isumi@hotmail.com", "I55€", "isumi", "lindabjala");
 		
 		assertEquals("Two customers with same email should be equal", customer1, customer2);
-		assertEquals("Two customers that are equal shoul preoduce same hashCode", customer1.hashCode(), customer2.hashCode());
+		assertEquals("Two customers that are equal should produce same hashCode", customer1.hashCode(), customer2.hashCode());
 	}	
 }

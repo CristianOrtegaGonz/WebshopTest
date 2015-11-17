@@ -30,6 +30,6 @@ public class ProductTest
 		product2 = new Product("1001", "Shampoo", 200, 20);		
 		
 		assertEquals("Two products with same productId should be equal", product1, product2);
-		assertEquals("Two products that are equal shoul preoduce same hashCode", product1.hashCode(), product2.hashCode());
+		assertEquals("Two products that are equal should produce same hashCode", product1.hashCode(), product2.hashCode());
 	}
 }
