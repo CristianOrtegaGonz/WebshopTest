@@ -36,14 +36,12 @@ public class ECommerceTest
 	private Repository<String, Customer> customerRepositoryMock;
 	@Mock(name = "productRepository")
 	private Repository<String, Product> productRepositoryMock;
+	private ECommerceService eCommerceService;
 	@Mock
 	private IdGenerator<String> idGeneratorMock;
-	private ECommerceService eCommerceService;
-	private String email = "aa@aa.com";
 	private String password = "secret";
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
-	private String customerId = "1000";
 	private String orderId = "1002";
 	
 //	@InjectMocks <-- funkar inte. Debuggade. Den fattar inte vilken Repository är orderRepository. Det verkar som att den tar den första Mocken i alfabetisk ordning.
@@ -73,9 +71,10 @@ public class ECommerceTest
 	{
 		exception.expect(OrderException.class);
 		exception.expectMessage(equalTo("Shopping cart is empty"));
-
-		Customer customer = new Customer(customerId, email, password, firstName, lastName);
+		
+		Customer customer = new Customer(null, null, null, null, null);
 		ShoppingCart shoppingCart = new ShoppingCart();
+		
 		eCommerceService.checkOut(customer, shoppingCart);
 
 		assertTrue(shoppingCart.getProducts().isEmpty());
