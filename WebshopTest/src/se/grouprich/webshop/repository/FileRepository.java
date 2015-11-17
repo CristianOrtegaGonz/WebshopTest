@@ -23,12 +23,14 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		}
 	}
 
+	@Override
 	public void create(T value)
 	{
 		values.put(value.getId(), value);
 		fileInfo.createFile(values);
 	}
 
+	@Override
 	public void delete(String id)
 	{
 		if (values.containsKey(id))
@@ -38,6 +40,7 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		fileInfo.createFile(values);
 	}
 
+	@Override
 	public void uppdate(String id, T value)
 	{
 		if (values.containsKey(id))
@@ -47,18 +50,31 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		fileInfo.createFile(values);
 	}
 
+	@Override
 	public T read(String id) throws RepositoryException
 	{
 		if (values.containsKey(id))
 		{
 			return values.get(id);
 		}
-		throw new RepositoryException("This id doesn't exists");
+		throw new RepositoryException("Id does not exists");
 	}
 
 	@Override
 	public Map<String, T> getAll()
 	{
 		return values;
+	}
+
+	@Override
+	public T getValueById(String id) throws RepositoryException
+	{
+		for (T value : values.values())
+		{
+			if(value.getId().equals(id)){
+				return value;
+			}
+		}
+		throw new RepositoryException("Id does not exists");
 	}
 }

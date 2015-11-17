@@ -11,4 +11,5 @@ public interface Repository<K, T>
 	void uppdate(K id, T value);
 	T read(K id) throws RepositoryException;
 	Map<K, T> getAll();
+	T getValueById(K id) throws RepositoryException;
 }
