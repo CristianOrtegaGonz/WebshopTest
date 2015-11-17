@@ -23,7 +23,6 @@ import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
-import se.grouprich.webshop.service.validation.CustomerValidator;
 import se.grouprich.webshop.service.validation.PasswordValidator;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -48,12 +47,6 @@ public class ECommerceServiceTest
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
 	private String id = "1002";
-
-
-	// @InjectMocks <-- funkar inte. Debuggade. Den fattar inte vilken
-	// Repository är orderRepository. Det verkar som att den tar den första
-	// Mocken i alfabetisk ordning.
-	// private ECommerceService eCommerceService;
 
 	@Before
 	public void setup()
