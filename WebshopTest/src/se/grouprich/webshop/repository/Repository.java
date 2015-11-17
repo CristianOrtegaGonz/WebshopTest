@@ -6,10 +6,9 @@ import se.grouprich.webshop.exception.RepositoryException;
 
 public interface Repository<K, T>
 {
-	void create(T value);
+	T create(T value);
 	void delete(K value);
 	void uppdate(K id, T value);
 	T read(K id) throws RepositoryException;
 	Map<K, T> getAll();
-	T getValueById(K id) throws RepositoryException;
 }

@@ -11,6 +11,10 @@ import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
+import se.grouprich.webshop.service.validation.CustomerValidator;
+import se.grouprich.webshop.service.validation.DuplicateValidator;
+import se.grouprich.webshop.service.validation.PasswordValidator;
+import se.grouprich.webshop.service.validation.ProductValidator;
 
 public final class ECommerceService
 {
@@ -18,13 +22,20 @@ public final class ECommerceService
 	private final Repository<String, Customer> customerRepository;
 	private final Repository<String, Product> productRepository;
 	private final IdGenerator<String> idGenerator;
+	private final PasswordValidator eCommerceValidator;
+	private final DuplicateValidator customerDuplicateValidator;
+	private final DuplicateValidator productDuplicateValidator;
 
-	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository, IdGenerator<String> idGenerator)
+	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository,
+			IdGenerator<String> idGenerator, PasswordValidator eCommerceValidator)
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
 		this.productRepository = productRepository;
 		this.idGenerator = idGenerator;
+		this.eCommerceValidator = eCommerceValidator;
+		customerDuplicateValidator = new CustomerValidator();
+		productDuplicateValidator = new ProductValidator();
 	}
 
 	public Repository<String, Order> getOrderRepository()
@@ -41,53 +52,83 @@ public final class ECommerceService
 	{
 		return productRepository;
 	}
-	
+
 	public IdGenerator<String> getIdGenerator()
 	{
 		return idGenerator;
 	}
 
-	// fixat så att det är lättare att läsa
-	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
+	public PasswordValidator geteCommerceValidator()
 	{
-		for (Customer customer : customerRepository.getAll().values())
+		return eCommerceValidator;
+	}
+
+	public DuplicateValidator getDuplicateValidator()
+	{
+		return customerDuplicateValidator;
+	}
+
+	public DuplicateValidator getProductDuplicateValidator()
+	{
+		return productDuplicateValidator;
+	}
+
+	public ShoppingCart createShoppingCart()
+	{
+		return new ShoppingCart();
+	}
+
+	// fixat så att det är lättare att läsa
+	public Customer createCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
+	{
+		if (customerDuplicateValidator.alreadyExsists(email))
 		{
-			if (customer.getEmail().equals(email))
-			{
-				throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
-			}
+			throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
 		}
 		if (email.length() > 30)
 		{
 			throw new CustomerRegistrationException("Email address that is longer than 30 characters is not allowed");
-		}		
-		if (!checkPassword(password))
+		}
+		if (!eCommerceValidator.hasSecurePassword(password))
 		{
-//			ändrat message så att den visar vad som ska fixas tydligare
 			throw new CustomerRegistrationException("Password must have at least an uppercase letter, two digits and a special character such as !@#$%^&*(){}[]");
 		}
 		String id = idGenerator.getGeneratedId();
 		Customer customer = new Customer(id, email, password, firstName, lastName);
-		customerRepository.create(customer);
+		return customerRepository.create(customer);
 	}
 
-	public void registerProduct(String productName, double price, int stockQuantity) throws ProductRegistrationException, RepositoryException
+	public Product createProduct(String productName, double price, int stockQuantity) throws ProductRegistrationException, RepositoryException
 	{
-		if (getProductByName(productName) == null)
-		{
-			String id = idGenerator.getGeneratedId();
-			Product product = new Product(id, productName, price, stockQuantity);
-			productRepository.create(product);
-		}
-		else
+		if (productDuplicateValidator.alreadyExsists(productName))
 		{
 			throw new ProductRegistrationException("Product with name: " + productName + " already exists");
 		}
+		String id = idGenerator.getGeneratedId();
+		Product product = new Product(id, productName, price, stockQuantity);
+		return productRepository.create(product);
 	}
-
-	public ShoppingCart makeShoppingCart()
+	
+	public Order checkOut(Customer customer, ShoppingCart shoppingCart) throws OrderException
 	{
-		return new ShoppingCart();
+		if (shoppingCart.getProducts().isEmpty())
+		{
+			throw new OrderException("Shopping cart is empty");
+		}
+		String id = null;
+		return new Order(id, customer, shoppingCart);
+	}
+	
+	public Order createOrder(Order order) throws PaymentException
+	{
+		if (order.getShoppingCart().getTotalPrice() > 50000.00)
+		{
+			throw new PaymentException("We can not accept the total price exceeding SEK 50,000");
+		}
+		order.pay();
+		String id = idGenerator.getGeneratedId();
+		order.setId(id);
+		return orderRepository.create(order);
 	}
 
 	public void deleteCustomer(String customerId)
@@ -120,17 +161,17 @@ public final class ECommerceService
 		productRepository.uppdate(productId, product);
 	}
 
-	public Customer getCustomer(String customerId) throws RepositoryException
+	public Customer fetchCustomer(String customerId) throws RepositoryException
 	{
 		return customerRepository.read(customerId);
 	}
 
-	public Order getOrder(String orderId) throws RepositoryException
+	public Order fetchOrder(String orderId) throws RepositoryException
 	{
 		return orderRepository.read(orderId);
 	}
 
-	public Product getProduct(String productId) throws RepositoryException
+	public Product fetchProduct(String productId) throws RepositoryException
 	{
 		return productRepository.read(productId);
 	}
@@ -140,15 +181,17 @@ public final class ECommerceService
 		if (productRepository.getAll().containsKey(productId))
 		{
 			Product product = productRepository.read(productId);
-			if (shoppingCart.getProducts().contains(product))
+			if (shoppingCart.getProducts().contains(product) && product.getStockQuantity() >= product.getOrderQuantity() + orderQuantity)
 			{
 				product.addOrderQuantity(orderQuantity);
-				return;
 			}
-			if (product.getStockQuantity() >= orderQuantity)
+			else if (product.getStockQuantity() >= orderQuantity)
 			{
-				shoppingCart.addProductInShoppingCart(product);
-				product.setOrderQuantity(orderQuantity);
+				shoppingCart.addProductInShoppingCart(product, orderQuantity);
+			}
+			else
+			{
+				throw new OrderException("Stock quantity is: " + product.getStockQuantity());
 			}
 		}
 		else
@@ -165,125 +208,12 @@ public final class ECommerceService
 			if (shoppingCart.getProducts().contains(product) && product.getStockQuantity() >= orderQuantity)
 			{
 				product.setOrderQuantity(orderQuantity);
+				shoppingCart.calculateTotalPrice();
 			}
 			else
 			{
 				throw new OrderException("Stock quantity is: " + product.getStockQuantity());
 			}
 		}
-	}
-
-	public double calculateTotalPrice(ShoppingCart shoppingCart)
-	{
-		double totalPrice = shoppingCart.calculateTotalPrice(shoppingCart.getProducts());
-		return totalPrice;
-	}
-
-	public Order checkOut(Customer customer, ShoppingCart shoppingCart) throws OrderException
-	{
-		if (shoppingCart.getProducts().isEmpty())
-		{
-			throw new OrderException("Shopping cart is empty");
-		}
-		String id = null;
-		return new Order(id, customer, shoppingCart);
-	}
-
-	public void pay(Order order) throws PaymentException
-	{
-		if (order.getShoppingCart().getTotalPrice() > 50000.00)
-		{
-			throw new PaymentException("We can not accept the total price exceeding SEK 50,000");
-		}
-		order.pay();
-		String id = idGenerator.getGeneratedId();
-		order.setId(id);
-		orderRepository.create(order);
-	}
-
-	public Product getProductByName(String productName) throws RepositoryException
-	{
-		for (Product product : productRepository.getAll().values())
-		{
-			if (product.getProductName().equals(productName))
-			{
-				return product;
-			}
-		}
-		return null;
-	}
-
-	public Customer getCustomerByEmail(String email) throws RepositoryException
-	{
-		for (Customer customer : customerRepository.getAll().values())
-		{
-			if (customer.getEmail().equals(email))
-			{
-				return customer;
-			}
-		}
-		return null;
-	}
-
-	public Order getOrderByCustomerID(String customerId) throws RepositoryException
-	{
-		for (Order order : orderRepository.getAll().values())
-		{
-			if (order.getCustomer().getId().equals(customerId))
-			{
-				return order;
-			}
-		}
-		return null;
-	}
-	
-//	kankse bör vi inte acceptera svenska tecken för password? För annars finns det risk att man inte kan logga in med tangentbord som saknar svenska tecken
-	private boolean checkPassword(String password)
-	{
-		if (password == null || password.trim().length() == 0)
-		{
-			return false;
-		}
-
-		boolean digits = false;
-		boolean versal = false;
-		boolean specialCharacter = false;
-		int counterNumbers = 0;
-
-		for (int i = 0; i < password.length(); i++)
-		{
-			// check that in password contains only letters, numbers and
-			// acceptable special characters
-			if (password.substring(i, i + 1).matches("[A-ZÅÖÄa-zåöä\\d\\p{Punct}]+"))
-			{
-				// check for all decimal digits (0-9)
-				if (password.substring(i, i + 1).matches("\\d+"))
-				{
-					counterNumbers++;
-
-					if (counterNumbers >= 2)
-					{
-						digits = true;
-					}
-				}
-
-				// check an uppercase letter
-				if (password.substring(i, i + 1).matches("[A-ZÅÄÖ]+"))
-				{
-					versal = true;
-				}
-
-				// Special characters control
-				if (password.substring(i, i + 1).matches("\\p{Punct}+"))
-				{
-					specialCharacter = true;
-				}
-			}
-			else
-			{
-				return false;
-			}
-		}
-		return (digits && versal && specialCharacter);
 	}
 }

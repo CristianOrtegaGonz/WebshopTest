@@ -24,10 +24,11 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	}
 
 	@Override
-	public void create(T value)
+	public T create(T value)
 	{
 		values.put(value.getId(), value);
 		fileInfo.createFile(values);
+		return value;
 	}
 
 	@Override
@@ -64,17 +65,5 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	public Map<String, T> getAll()
 	{
 		return values;
-	}
-
-	@Override
-	public T getValueById(String id) throws RepositoryException
-	{
-		for (T value : values.values())
-		{
-			if(value.getId().equals(id)){
-				return value;
-			}
-		}
-		throw new RepositoryException("Id does not exists");
 	}
 }

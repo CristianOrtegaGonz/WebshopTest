@@ -22,10 +22,11 @@ import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
+import se.grouprich.webshop.service.validation.CustomerValidator;
+import se.grouprich.webshop.service.validation.PasswordValidator;
 
 @RunWith(MockitoJUnitRunner.class)
-// Ska klassen heta ECommerceServiceTest för tydlighets skull?
-public class ECommerceTest
+public class ECommerceServiceTest
 {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
@@ -39,6 +40,7 @@ public class ECommerceTest
 	private ECommerceService eCommerceService;
 	@Mock
 	private IdGenerator<String> idGeneratorMock;
+	private PasswordValidator eCommerceValidator = new CustomerValidator();
 	private String password = "secret";
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
@@ -50,7 +52,7 @@ public class ECommerceTest
 	@Before
 	public void setup()
 	{
-		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock, idGeneratorMock);
+		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock, idGeneratorMock, eCommerceValidator);
 	}
 
 	@Test
@@ -61,7 +63,7 @@ public class ECommerceTest
 
 		String email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
 
-		eCommerceService.registerCustomer(email, password, firstName, lastName);
+		eCommerceService.createCustomer(email, password, firstName, lastName);
 
 		assertTrue(email.length() > 30);
 	}
@@ -88,7 +90,7 @@ public class ECommerceTest
 		Order order = new Order(orderId, customer, shoppingCart);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(orderId);
 		
-		eCommerceService.pay(order);
+		eCommerceService.createOrder(order);
 		
 		assertEquals(orderId, order.getId());
 
@@ -106,7 +108,7 @@ public class ECommerceTest
 		shoppingCart.setTotalPrice(50001.00);
 		Order order = new Order(null, null, shoppingCart);
 		
-		eCommerceService.pay(order);
+		eCommerceService.createOrder(order);
 		
 		assertTrue(shoppingCart.getTotalPrice() > 50000);
 	}
