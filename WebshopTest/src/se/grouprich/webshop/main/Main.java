@@ -14,6 +14,8 @@ import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.FileRepository;
 import se.grouprich.webshop.repository.Repository;
 import se.grouprich.webshop.service.ECommerceService;
+import se.grouprich.webshop.service.validation.CustomerValidator;
+import se.grouprich.webshop.service.validation.PasswordValidator;
 
 public final class Main
 {
@@ -24,21 +26,17 @@ public final class Main
 		Repository<String, Customer>  fileCustomerRepository = new FileRepository<Customer>(Customer.class);
 		Repository<String, Order> fileOrderRepository = new FileRepository<Order>(Order.class);
 		IdGenerator<String> idGenerator = new ECommerceIdGenerator();
-		ECommerceService eCommerceService = new ECommerceService(fileOrderRepository, fileCustomerRepository, fileProductRepository, idGenerator);
+		PasswordValidator eCommerceValidator = new CustomerValidator();
+		ECommerceService eCommerceService = new ECommerceService(fileOrderRepository, fileCustomerRepository, fileProductRepository, idGenerator, eCommerceValidator);
 
-		eCommerceService.registerCustomer("arbieto@mail.com", "Arbieto12*", "Haydee", "DeAlvarado");
-		eCommerceService.registerCustomer("qqqq@mail.com", "Q#qq32", "hahaha", "hohoho");
+		Customer customer1 = eCommerceService.createCustomer("arbieto@mail.com", "Arbieto12*", "Haydee", "DeAlvarado");
+		Customer customer2 = eCommerceService.createCustomer("qqqq@mail.com", "Q#qq32", "hahaha", "hohoho");
 		
-		eCommerceService.registerProduct("Shampoo", 20.00, 6);
-		eCommerceService.registerProduct("Treatment", 20.00, 10);
-		eCommerceService.registerProduct("Eco Shampoo", 30.00, 100);
+		Product product1 = eCommerceService.createProduct("Shampoo", 20.00, 6);
+		Product product2 = eCommerceService.createProduct("Treatment", 20.00, 10);
+		Product product3 = eCommerceService.createProduct("Eco Shampoo", 30.00, 100);
 
-		Customer customer = eCommerceService.getCustomerByEmail("arbieto@mail.com");
-		System.out.println("Haydee's id:" + customer.getId());
-		ShoppingCart shoppingCart1 = eCommerceService.makeShoppingCart();
-
-		Product product1 = eCommerceService.getProductByName("Shampoo");
-		Product product2 = eCommerceService.getProductByName("Treatment");
+		ShoppingCart shoppingCart1 = eCommerceService.createShoppingCart();
 
 		System.out.println();
 		System.out.println("Before update\n-----------------------");
@@ -69,12 +67,16 @@ public final class Main
 		eCommerceService.addProductInShoppingCart(shoppingCart1, product2.getId(), 5);
 
 		eCommerceService.changeOrderQuantity(shoppingCart1, product1.getId(), 2);
+		
+		System.out.println();
+		
+		System.out.println("What's in the shopping cart?: " + shoppingCart1);
 
 		System.out.println();
 
-		System.out.println("Total price: " + eCommerceService.calculateTotalPrice(shoppingCart1) + " kr");	
+		System.out.println("Total price: " + shoppingCart1.calculateTotalPrice() + " kr");	
 		
-		eCommerceService.pay(eCommerceService.checkOut(customer, shoppingCart1));
+		eCommerceService.createOrder(eCommerceService.checkOut(customer1, shoppingCart1));
 		
 		System.out.println("Order list: " + fileOrderRepository.getAll().toString());
 
@@ -82,23 +84,23 @@ public final class Main
 		System.out.println("Stock quantity of " + product1.getProductName() + ": " + product1.getStockQuantity());
 		System.out.println("Stock quantity of " + product2.getProductName() + ": " + product2.getOrderQuantity());
 
-		System.out.println("customer: " + eCommerceService.getCustomer(customer.getId()));
+		System.out.println("customer: " + fileCustomerRepository.read(customer1.getId()));
 
 		System.out.println();
 		System.out.println("Before delete customer\n-----------------------");
 
-		for (Customer customer1 : fileCustomerRepository.getAll().values())
+		for (Customer customer : fileCustomerRepository.getAll().values())
 		{
-			System.out.println(customer1);
+			System.out.println(customer);
 		}
 
-		eCommerceService.deleteCustomer(customer.getId());
+		eCommerceService.deleteCustomer(customer1.getId());
 
 		System.out.println();
 		System.out.println("After delete customer\n-----------------------");
-		for (Customer customer1 : fileCustomerRepository.getAll().values())
+		for (Customer customer : fileCustomerRepository.getAll().values())
 		{
-			System.out.println(customer1);
+			System.out.println(customer);
 		}
 
 		System.out.println();

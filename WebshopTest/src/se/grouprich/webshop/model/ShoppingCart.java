@@ -32,20 +32,21 @@ public final class ShoppingCart implements Serializable
 		this.totalPrice = totalPrice;
 	}
 
-	public double calculateTotalPrice(List<Product> products)
+	public double calculateTotalPrice()
 	{
 		totalPrice = 0;
 		for (Product product : products)
 		{
-			totalPrice = totalPrice + product.getPrice() * product.getOrderQuantity();
+			totalPrice = totalPrice + (product.getPrice() * product.getOrderQuantity());
 		}
 		return totalPrice;
 	}
 	
-	public void addProductInShoppingCart(Product product) throws OrderException
+	public void addProductInShoppingCart(Product product, int orderQuantity) throws OrderException
 	{
 		products.add(product);
-		calculateTotalPrice(products);
+		product.setOrderQuantity(orderQuantity);
+		calculateTotalPrice();
 	}
 
 	public void deleteOneProduct(Product product) throws OrderException
@@ -55,11 +56,13 @@ public final class ShoppingCart implements Serializable
 			throw new OrderException("Product doesn't exsists.");
 		}
 		products.remove(product);
+		calculateTotalPrice();
 	}
 
 	public void emptyShoppingCart(List<Product> products)
 	{
 		products.removeAll(products);
+		calculateTotalPrice();
 	}
 
 	@Override
@@ -85,5 +88,11 @@ public final class ShoppingCart implements Serializable
 		result += products.hashCode() * 37;
 		result += totalPrice *37;
 		return result;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "ShoppingCart [products=" + products + ", totalPrice=" + totalPrice + "]";
 	}
 }

@@ -7,7 +7,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
@@ -16,11 +15,11 @@ import se.grouprich.webshop.model.Customer;
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerTest
 {
-	Customer customer1, customer2;
-
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
-	
+
+	Customer customer1, customer2;
+
 	@Test
 	public void customerWithIdenticalValuesShouldBeEqual() throws CustomerRegistrationException 
 	{

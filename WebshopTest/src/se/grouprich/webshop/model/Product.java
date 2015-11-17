@@ -57,26 +57,12 @@ public final class Product implements Serializable, Identifiable<String>
 
 	public void setOrderQuantity(int orderQuantity) throws OrderException
 	{
-		if (stockQuantity >= orderQuantity)
-		{
-			this.orderQuantity = orderQuantity;
-		}
-		else
-		{
-			throw new OrderException("Stock quantity is: " + stockQuantity);
-		}
+		this.orderQuantity = orderQuantity;
 	}
 
 	public void addOrderQuantity(int orderQuantity) throws OrderException
 	{
-		if (stockQuantity >= this.orderQuantity + orderQuantity)
-		{
-			this.orderQuantity = this.orderQuantity + orderQuantity;
-		}
-		else
-		{
-			throw new OrderException("Stock quantity is: " + stockQuantity);
-		}
+		this.orderQuantity = this.orderQuantity + orderQuantity;
 	}
 
 	public int getOrderQuantity()
@@ -104,7 +90,7 @@ public final class Product implements Serializable, Identifiable<String>
 		}
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
@@ -117,6 +103,7 @@ public final class Product implements Serializable, Identifiable<String>
 	@Override
 	public String toString()
 	{
-		return productName + "(" + productId + ") ---- Price: " + price + " kr ---- Stock quantity: " + stockQuantity;
+		return productName + "(" + productId + ") ----"
+				+ " Price: " + price + " kr ---- Order quantity: " + orderQuantity + " Stock quantity: " + stockQuantity;
 	}
 }
