@@ -6,7 +6,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
@@ -18,7 +17,6 @@ public class CustomerTest
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-//	tagits bort @InjectMocks eftersom Customer är inte beroende av mock
 	Customer customer1, customer2;
 	
 	@Test
