@@ -1,6 +1,5 @@
 package se.grouprich.webshop.model;
 
-import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.*;
 
 import org.junit.Rule;

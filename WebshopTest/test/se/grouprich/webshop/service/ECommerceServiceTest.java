@@ -16,6 +16,7 @@ import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
 import se.grouprich.webshop.exception.ProductRegistrationException;
+import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.idgenerator.IdGenerator;
 import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.model.Order;
@@ -37,22 +38,27 @@ public class ECommerceServiceTest
 	private Repository<String, Customer> customerRepositoryMock;
 	@Mock(name = "productRepository")
 	private Repository<String, Product> productRepositoryMock;
-	private ECommerceService eCommerceService;
 	@Mock
 	private IdGenerator<String> idGeneratorMock;
-	private PasswordValidator eCommerceValidator = new CustomerValidator();
+	@Mock
+	private PasswordValidator passwordValidatorMock;
+	private ECommerceService eCommerceService;
+
 	private String password = "secret";
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
-	private String orderId = "1002";
-	
-//	@InjectMocks <-- funkar inte. Debuggade. Den fattar inte vilken Repository är orderRepository. Det verkar som att den tar den första Mocken i alfabetisk ordning.
-//	private ECommerceService eCommerceService;
+	private String id = "1002";
+
+
+	// @InjectMocks <-- funkar inte. Debuggade. Den fattar inte vilken
+	// Repository är orderRepository. Det verkar som att den tar den första
+	// Mocken i alfabetisk ordning.
+	// private ECommerceService eCommerceService;
 
 	@Before
 	public void setup()
 	{
-		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock, idGeneratorMock, eCommerceValidator);
+		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock, idGeneratorMock, passwordValidatorMock);
 	}
 
 	@Test
@@ -73,10 +79,10 @@ public class ECommerceServiceTest
 	{
 		exception.expect(OrderException.class);
 		exception.expectMessage(equalTo("Shopping cart is empty"));
-		
+
 		Customer customer = new Customer(null, null, null, null, null);
 		ShoppingCart shoppingCart = new ShoppingCart();
-		
+
 		eCommerceService.checkOut(customer, shoppingCart);
 
 		assertTrue(shoppingCart.getProducts().isEmpty());
@@ -84,20 +90,19 @@ public class ECommerceServiceTest
 
 	@Test
 	public void orderShouldHaveGotItsIdAssigned() throws CustomerRegistrationException, PaymentException, OrderException
-	{		
+	{
 		Customer customer = new Customer(null, null, null, null, null);
 		ShoppingCart shoppingCart = new ShoppingCart();
-		Order order = new Order(orderId, customer, shoppingCart);
-		when(idGeneratorMock.getGeneratedId()).thenReturn(orderId);
-		
+		Order order = new Order(id, customer, shoppingCart);
+		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
+
 		eCommerceService.createOrder(order);
-		
-		assertEquals(orderId, order.getId());
+
+		assertEquals(id, order.getId());
 
 		verify(idGeneratorMock).getGeneratedId();
 	}
-	
-//	fixat denna metod efter ändringar
+
 	@Test
 	public void totalPriceShouldNotExceedSEK50000() throws ProductRegistrationException, OrderException, PaymentException, CustomerRegistrationException
 	{
@@ -107,9 +112,48 @@ public class ECommerceServiceTest
 		ShoppingCart shoppingCart = new ShoppingCart();
 		shoppingCart.setTotalPrice(50001.00);
 		Order order = new Order(null, null, shoppingCart);
-		
+
 		eCommerceService.createOrder(order);
-		
+
 		assertTrue(shoppingCart.getTotalPrice() > 50000);
+	}
+
+	@Test
+	public void shouldFetchOrderById() throws PaymentException, RepositoryException
+	{
+		Order order = new Order(id, null, null);
+		when(orderRepositoryMock.read(id)).thenReturn(order);
+
+		Order order2 = eCommerceService.fetchOrder(id);
+
+		assertEquals(order, order2);
+
+		verify(orderRepositoryMock).read(id);
+	}
+
+	@Test
+	public void shouldFetchCustomerById() throws CustomerRegistrationException, RepositoryException
+	{
+		Customer customer = new Customer(id, null, null, null, null);
+		when(customerRepositoryMock.read(id)).thenReturn(customer);
+
+		Customer customer2 = eCommerceService.fetchCustomer(id);
+
+		assertEquals(customer, customer2);
+
+		verify(customerRepositoryMock).read(id);
+	}
+
+	@Test
+	public void shouldFetchProductByID() throws ProductRegistrationException, RepositoryException
+	{
+		Product product = new Product(id, null, 1.0, 1);
+		when(productRepositoryMock.read(id)).thenReturn(product);
+		
+		Product product2 = eCommerceService.fetchProduct(id);
+		
+		assertEquals(product, product2);
+		
+		verify(productRepositoryMock).read(id);
 	}
 }
