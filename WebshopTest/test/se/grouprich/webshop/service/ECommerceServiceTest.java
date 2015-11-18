@@ -107,7 +107,6 @@ public class ECommerceServiceTest
 
 		verify(idGeneratorMock).getGeneratedId();
 	}
-	
 //	lagt till Mockar i koden och ändrat returvärdet av emailValidatorMock.isLengthWithinRange(email)
 //	till true så att den kommer ner till passwordValidation. satte dåligt password som ska faila
 	@Test 
@@ -180,18 +179,17 @@ public class ECommerceServiceTest
 	{
 		Product previousProduct = new Product(id, "Schampo", 10.00, 10);
 		Product product = new Product(id, "Lyxig Schampo", 20.00, 20);
-		
+
 		when(productRepositoryMock.update(id, product)).thenReturn(product);
-		
+
 		Product updatedProduct = eCommerceService.updateProduct(id, product);
-		
+
 		assertThat(updatedProduct, not(equalTo(previousProduct)));
 		assertThat(updatedProduct.getId(), equalTo(previousProduct.getId()));
 		assertTrue(updatedProduct.getProductName().equals("Lyxig Schampo"));
 
 		verify(productRepositoryMock).update(id, product);
 	}
-	
 	// ta bort en product
 
 	@Test
@@ -206,7 +204,6 @@ public class ECommerceServiceTest
 
 		verify(customerRepositoryMock).read(id);
 	}
-	
 	// Todo hämta alla customer
 
 	@Test
@@ -246,9 +243,6 @@ public class ECommerceServiceTest
 
 		verify(customerRepositoryMock).update(id, customer);
 	}
-	
-	//ta bort en customer
-		
 
 	// ta bort en customer
 
@@ -264,10 +258,10 @@ public class ECommerceServiceTest
 
 		verify(orderRepositoryMock).read(id);
 	}
-	
-	//Todo hämta alla order
-	//todo hämta alla order för en viss användare
-	
+
+	// Todo hämta alla order
+	// todo hämta alla order för en viss användare
+
 	@Test
 	public void shouldCreateOrder() throws CustomerRegistrationException, PaymentException
 	{
@@ -317,4 +311,5 @@ public class ECommerceServiceTest
 	}
 
 	// ta bort en order
+
 }
