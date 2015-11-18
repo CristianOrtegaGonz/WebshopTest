@@ -86,7 +86,7 @@ public final class Product implements Serializable, Identifiable<String>
 		if (other instanceof Product)
 		{
 			Product otherProduct = (Product) other;
-			return productId.equals(otherProduct.productId);
+			return productId.equals(otherProduct.productId) && productName.equals(otherProduct.productName) && price == price;
 		}
 		return false;
 	}

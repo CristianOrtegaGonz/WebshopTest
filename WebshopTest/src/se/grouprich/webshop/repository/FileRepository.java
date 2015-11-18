@@ -43,13 +43,14 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	}
 
 	@Override
-	public void uppdate(String id, T value)
+	public T update(String id, T value) throws RepositoryException
 	{
 		if (values.containsKey(id))
 		{
 			values.replace(id, value);
 		}
 		fileInfo.createFile(values);
+		return value;
 	}
 
 	@Override

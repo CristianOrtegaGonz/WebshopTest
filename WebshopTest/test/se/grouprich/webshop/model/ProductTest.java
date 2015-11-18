@@ -20,7 +20,7 @@ public class ProductTest
 	{
 		product1 = new Product("1001", "Shampoo", 200, 20);
 		product2 = new Product("1001", "Shampoo", 200, 20);		
-		assertEquals("Two products with same productId should be equal", product1, product2); 
+		assertEquals("Two products with same product ID, name and price should be equal", product1, product2); 
 	}
 	
 	@Test
@@ -29,7 +29,7 @@ public class ProductTest
 		product1 = new Product("1001", "Shampoo", 200, 20);
 		product2 = new Product("1001", "Shampoo", 200, 20);		
 		
-		assertEquals("Two products with same productId should be equal", product1, product2);
+		assertEquals("Two products with same product Id, name and price should be equal", product1, product2);
 		assertEquals("Two products that are equal should produce same hashCode", product1.hashCode(), product2.hashCode());
 	}
 }

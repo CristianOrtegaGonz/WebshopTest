@@ -56,7 +56,7 @@ public class ECommerceServiceTest {
 					+ ", two digits and a special character such as !@#$%^&*(){}[]"));
 		
 		when(duplicateValidatorMock.alreadyExsists(email)).thenReturn(false);
-		when(emailValidatorMock.emailLengthInRange(email)).thenReturn(false);
+		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(false);
 		when(passwordValidatorMock.isValidPassword(password)).thenReturn(false);
 
 		eCommerceService.createCustomer(email, password, firstName, lastName);
@@ -69,7 +69,7 @@ public class ECommerceServiceTest {
 	{
 		Customer customer1 = new Customer(id, email, password, firstName, lastName);
 		when(duplicateValidatorMock.alreadyExsists(email)).thenReturn(false);
-		when(emailValidatorMock.emailLengthInRange(email)).thenReturn(true);
+		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(true);
 		when(passwordValidatorMock.isValidPassword(password)).thenReturn(true);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 		when(customerRepositoryMock.create(customer1)).thenReturn(customer1);
