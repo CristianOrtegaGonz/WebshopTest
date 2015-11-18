@@ -48,7 +48,7 @@ public class ECommerceServiceTest
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
 	private String id = "1002";
-	private ShoppingCart shoppingCart = new ShoppingCart();
+	private ShoppingCart shoppingCart;
 	Customer customer;
 	Order order;
 
@@ -58,7 +58,8 @@ public class ECommerceServiceTest
 		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock,
 				productRepositoryMock, idGeneratorMock, passwordValidatorMock);
 		customer = new Customer(id, email, password, firstName, lastName);
-		order = new Order(id, customer, shoppingCart);
+		shoppingCart = new ShoppingCart();
+		order = new Order(id, customer, shoppingCart);	
 	}
 
 	@Test
@@ -87,8 +88,6 @@ public class ECommerceServiceTest
 	@Test
 	public void orderShouldHaveGotItsIdAssigned() throws CustomerRegistrationException, PaymentException, OrderException
 	{
-		Customer customer = new Customer(id, email, password, firstName, lastName);
-		ShoppingCart shoppingCart = new ShoppingCart();
 		Order order = new Order(id, customer, shoppingCart);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 
