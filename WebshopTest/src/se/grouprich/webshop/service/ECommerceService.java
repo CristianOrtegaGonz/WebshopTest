@@ -22,7 +22,7 @@ public final class ECommerceService
 	private final Repository<String, Customer> customerRepository;
 	private final Repository<String, Product> productRepository;
 	private final IdGenerator<String> idGenerator;
-	private final PasswordValidator eCommerceValidator;
+	private final PasswordValidator passwordValidator;
 	private final DuplicateValidator customerDuplicateValidator;
 	private final DuplicateValidator productDuplicateValidator;
 
@@ -33,7 +33,7 @@ public final class ECommerceService
 		this.customerRepository = customerRepository;
 		this.productRepository = productRepository;
 		this.idGenerator = idGenerator;
-		this.eCommerceValidator = eCommerceValidator;
+		this.passwordValidator = eCommerceValidator;
 		customerDuplicateValidator = new CustomerValidator();
 		productDuplicateValidator = new ProductValidator();
 	}
@@ -60,7 +60,7 @@ public final class ECommerceService
 
 	public PasswordValidator geteCommerceValidator()
 	{
-		return eCommerceValidator;
+		return passwordValidator;
 	}
 
 	public DuplicateValidator getDuplicateValidator()
@@ -89,7 +89,7 @@ public final class ECommerceService
 		{
 			throw new CustomerRegistrationException("Email address that is longer than 30 characters is not allowed");
 		}
-		if (!eCommerceValidator.hasSecurePassword(password))
+		if (!passwordValidator.isValidPassword(password))
 		{
 			throw new CustomerRegistrationException("Password must have at least an uppercase letter, two digits and a special character such as !@#$%^&*(){}[]");
 		}

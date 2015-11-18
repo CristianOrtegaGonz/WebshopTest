@@ -21,7 +21,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 		customerRepository = new FileRepository<>(Customer.class);
 	}
 
-	public boolean hasSecurePassword(String password)
+	public boolean isValidPassword(String password)
 	{
 		if (password == null || password.trim().isEmpty())
 		{
