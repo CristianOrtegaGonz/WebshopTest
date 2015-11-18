@@ -5,7 +5,6 @@ import java.util.Map;
 
 import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.idgenerator.Identifiable;
-import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.repository.file.ECommerceFileInfo;
 import se.grouprich.webshop.repository.file.FileManager;
 
