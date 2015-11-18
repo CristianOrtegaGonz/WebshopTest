@@ -67,16 +67,4 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	{
 		return values;
 	}
-
-	@Override
-	public boolean emailExists(String email) {
-		for (T customer : values.values())
-		{
-			if (((Customer) customer).getEmail().equals(email))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
 }
