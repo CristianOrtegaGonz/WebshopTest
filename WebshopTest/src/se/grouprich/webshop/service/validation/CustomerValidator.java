@@ -27,14 +27,13 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 		{
 			return false;
 		}
-
+		
 		for (int i = 0; i < password.length(); i++)
 		{
 			// check that in password contains only letters, numbers and
 			// acceptable special characters
 			if (password.substring(i, i + 1).matches("[A-ZÅÖÄa-zåöä\\d\\p{Punct}]+"))
 			{
-				// check for all decimal digits (0-9)
 				if (password.substring(i, i + 1).matches("\\d+"))
 				{
 					counterNumbers++;
@@ -45,26 +44,20 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 					}
 				}
 
-				// check an uppercase letter
 				if (password.substring(i, i + 1).matches("[A-ZÅÄÖ]+"))
 				{
 					versal = true;
 				}
 
-				// Special characters control
 				if (password.substring(i, i + 1).matches("\\p{Punct}+"))
 				{
 					specialCharacter = true;
 				}
 			}
-			else
-			{
-				return false;
-			}
 		}
-		return specialCharacter;
+		return (digits && versal && specialCharacter);
 	}
-	
+
 	@Override
 	public boolean alreadyExsists(String email)
 	{

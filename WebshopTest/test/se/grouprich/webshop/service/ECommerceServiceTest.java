@@ -23,6 +23,7 @@ import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
+import se.grouprich.webshop.service.validation.DuplicateValidator;
 import se.grouprich.webshop.service.validation.PasswordValidator;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -41,6 +42,9 @@ public class ECommerceServiceTest
 	private IdGenerator<String> idGeneratorMock;
 	@Mock
 	private PasswordValidator passwordValidatorMock;
+	@Mock
+	private DuplicateValidator productDuplicateValidator;
+	
 	private ECommerceService eCommerceService;
 
 	private String email = "aa@aa.com";
@@ -48,6 +52,9 @@ public class ECommerceServiceTest
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
 	private String id = "1002";
+	private String productName = "Shampo";
+	private double price = 50.00;
+	private int stockQuantity = 10;
 	private ShoppingCart shoppingCart;
 	Customer customer; 
 	Order order;
@@ -56,7 +63,7 @@ public class ECommerceServiceTest
 	public void setup() throws CustomerRegistrationException
 	{
 		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock,
-				                                productRepositoryMock, idGeneratorMock, passwordValidatorMock);
+				                                productRepositoryMock, idGeneratorMock, passwordValidatorMock, productDuplicateValidator);
 		customer = new Customer(id, email, password, firstName, lastName);
 		shoppingCart = new ShoppingCart();
 		order = new Order(id, customer, shoppingCart);	
@@ -111,18 +118,18 @@ public class ECommerceServiceTest
 
 	//Todo: en user minst ha ett losendord som innehåller mist ....
 	
-	@Test 
-	public void customerShouldHavePasswordWithTwoVersalTwoNumbersSpecialCharacter()
-	{
-		exception.expect(CustomerRegistrationException.class);
-		exception.expectMessage(equalTo("Password must have at least an uppercase letter, two digits and a special character such as !@#$%^&*(){}[]"));
-
-	}
+//	@Test 
+//	public void customerShouldHavePasswordWithTwoVersalTwoNumbersSpecialCharacter()
+//	{
+//		exception.expect(CustomerRegistrationException.class);
+//		exception.expectMessage(equalTo("Password must have at least an uppercase letter, two digits and a special character such as !@#$%^&*(){}[]"));
+//
+//	}
 	
 	@Test
 	public void shouldFetchProductByID() throws ProductRegistrationException, RepositoryException
 	{
-		Product product1 = new Product(id, null, 1.0, 1);
+		Product product1 = new Product(id, productName, price, stockQuantity);
 		when(productRepositoryMock.read(id)).thenReturn(product1);
 		
 		Product product2 = eCommerceService.fetchProduct(id);
@@ -132,9 +139,27 @@ public class ECommerceServiceTest
 		verify(productRepositoryMock).read(id);
 	}
 
-	//Todo hämta alla produkter
-	//skapa en ny product 
-	//Updatera en product
+	@Test
+	public void shouldCreateProduct() throws ProductRegistrationException, RepositoryException
+	{
+		Product product1 = new Product(id, productName, price, stockQuantity);
+		when(productDuplicateValidator.alreadyExsists(productName)).thenReturn(false);
+		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
+		when(productRepositoryMock.create(product1)).thenReturn(product1);
+		
+		Product product2 = eCommerceService.createProduct(productName, price, stockQuantity);
+		
+		assertEquals(product1, product2);
+		
+		verify(productDuplicateValidator).alreadyExsists(productName);
+		verify(idGeneratorMock).getGeneratedId();
+		verify(productRepositoryMock).create(product1);
+	}
+	@Test
+	public void shouldUpdateProduct()
+	{
+		
+	}
 	//ta bort en product
 	
 	@Test
@@ -167,8 +192,12 @@ public class ECommerceServiceTest
 		verify(idGeneratorMock).getGeneratedId();
 		verify(customerRepositoryMock).create(customer1);	
 	}
-		//Updatera en customer
-		//ta bort en customer
+	@Test
+	public void shouldUpdateCustomer()
+	{
+		
+	}	
+	//ta bort en customer
 		
 	@Test
 	public void shouldFetchOrderById() throws PaymentException, RepositoryException

@@ -27,15 +27,15 @@ public final class ECommerceService
 	private final DuplicateValidator productDuplicateValidator;
 
 	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository,
-			IdGenerator<String> idGenerator, PasswordValidator eCommerceValidator)
+			IdGenerator<String> idGenerator, PasswordValidator eCommerceValidator, DuplicateValidator productDuplicateValidator)
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
 		this.productRepository = productRepository;
 		this.idGenerator = idGenerator;
 		this.passwordValidator = eCommerceValidator;
+		this.productDuplicateValidator = productDuplicateValidator;
 		customerDuplicateValidator = new CustomerValidator();
-		productDuplicateValidator = new ProductValidator();
 	}
 
 	public Repository<String, Order> getOrderRepository()
