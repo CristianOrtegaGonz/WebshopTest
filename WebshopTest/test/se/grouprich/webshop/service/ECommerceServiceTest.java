@@ -48,11 +48,17 @@ public class ECommerceServiceTest
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
 	private String id = "1002";
+	private ShoppingCart shoppingCart = new ShoppingCart();
+	Customer customer;
+	Order order;
 
 	@Before
-	public void setup()
+	public void setup() throws CustomerRegistrationException
 	{
-		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock, productRepositoryMock, idGeneratorMock, passwordValidatorMock);
+		eCommerceService = new ECommerceService(orderRepositoryMock, customerRepositoryMock,
+				productRepositoryMock, idGeneratorMock, passwordValidatorMock);
+		customer = new Customer(id, email, password, firstName, lastName);
+		order = new Order(id, customer, shoppingCart);
 	}
 
 	@Test
@@ -61,7 +67,7 @@ public class ECommerceServiceTest
 		exception.expect(CustomerRegistrationException.class);
 		exception.expectMessage(equalTo("Email address that is longer than 30 characters is not allowed"));
 
-		String email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
+		email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
 
 		eCommerceService.createCustomer(email, password, firstName, lastName);
 	}
@@ -124,7 +130,7 @@ public class ECommerceServiceTest
 	@Test
 	public void shouldFetchCustomerById() throws CustomerRegistrationException, RepositoryException
 	{
-		Customer customer1 = new Customer(id, null, null, null, null);
+		Customer customer1 = new Customer(id, email, password, firstName, lastName);
 		when(customerRepositoryMock.read(id)).thenReturn(customer1);
 
 		Customer customer2 = eCommerceService.fetchCustomer(id);
@@ -149,7 +155,7 @@ public class ECommerceServiceTest
 
 	public void shouldCreateOrder() throws CustomerRegistrationException, PaymentException
 	{
-		Customer customer = new Customer(null, null, null, null, null);
+		Customer customer = new Customer(id, email, password, firstName, lastName);
 		ShoppingCart shoppingCart = new ShoppingCart();
 		shoppingCart.setTotalPrice(200);
 		Order order1 = new Order(id, customer, shoppingCart);
@@ -163,10 +169,12 @@ public class ECommerceServiceTest
 		verify(idGeneratorMock).getGeneratedId();
 		verify(orderRepositoryMock).create(order1);
 	}
-
+	
+	@Test
 	public void shouldCreateCustomer() throws CustomerRegistrationException
 	{
 		Customer customer1 = new Customer(id, email, password, firstName, lastName);
+		when(passwordValidatorMock.isValidPassword(password)).thenReturn(true);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 		when(customerRepositoryMock.create(customer1)).thenReturn(customer1);
 		
@@ -174,6 +182,7 @@ public class ECommerceServiceTest
 		
 		assertEquals(customer1, customer2);
 		
+		verify(passwordValidatorMock).isValidPassword(password);
 		verify(idGeneratorMock).getGeneratedId();
 		verify(customerRepositoryMock).create(customer1);	
 	}
