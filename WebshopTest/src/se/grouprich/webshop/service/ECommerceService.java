@@ -146,19 +146,19 @@ public final class ECommerceService
 		productRepository.delete(productId);
 	}
 
-	public void uppdateCustomer(String customerId, Customer customer)
+	public Customer updateCustomer(String customerId, Customer customer) throws RepositoryException
 	{
-		customerRepository.uppdate(customerId, customer);
+		return customerRepository.update(customerId, customer);
 	}
 
-	public void uppdateOrder(String orderId, Order order)
+	public Order updateOrder(String orderId, Order order) throws RepositoryException
 	{
-		orderRepository.uppdate(orderId, order);
+		return orderRepository.update(orderId, order);
 	}
 
-	public void uppdateProduct(String productId, Product product)
+	public Product updateProduct(String productId, Product product) throws RepositoryException
 	{
-		productRepository.uppdate(productId, product);
+		return productRepository.update(productId, product);
 	}
 
 	public Customer fetchCustomer(String customerId) throws RepositoryException

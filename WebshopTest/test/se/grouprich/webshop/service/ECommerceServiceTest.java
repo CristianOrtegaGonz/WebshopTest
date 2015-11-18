@@ -52,7 +52,7 @@ public class ECommerceServiceTest
 	private String firstName = "Haydee";
 	private String lastName = "Arbeito";
 	private String id = "1002";
-	private String productName = "Shampo";
+	private String productName = "Schampo";
 	private double price = 50.00;
 	private int stockQuantity = 10;
 	private ShoppingCart shoppingCart;
@@ -155,10 +155,22 @@ public class ECommerceServiceTest
 		verify(idGeneratorMock).getGeneratedId();
 		verify(productRepositoryMock).create(product1);
 	}
+	
 	@Test
-	public void shouldUpdateProduct()
+	public void shouldUpdateProduct() throws ProductRegistrationException, RepositoryException
 	{
+		Product previousProduct = new Product(id, "Schampo", 10.00, 10);
+		Product product = new Product(id, "Lyxig Schampo", 20.00, 20);
 		
+		when(productRepositoryMock.update(id, product)).thenReturn(product);
+		
+		Product updatedProduct = eCommerceService.updateProduct(id, product);
+		
+		assertThat(updatedProduct, not(equalTo(previousProduct)));
+		assertThat(updatedProduct.getId(), equalTo(previousProduct.getId()));
+		assertTrue(updatedProduct.getProductName().equals("Lyxig Schampo"));
+		
+		verify(productRepositoryMock).update(id, product);
 	}
 	//ta bort en product
 	
@@ -192,11 +204,24 @@ public class ECommerceServiceTest
 		verify(idGeneratorMock).getGeneratedId();
 		verify(customerRepositoryMock).create(customer1);	
 	}
+	
 	@Test
-	public void shouldUpdateCustomer()
+	public void shouldUpdateCustomer() throws CustomerRegistrationException, RepositoryException
 	{
-		
-	}	
+		Customer previousCustomer = new Customer(id, "aa@aa.com", "Aa12&", "Haydee", "Arbeito");
+		Customer customer = new Customer(id, "bb@bb.se", "Bb15#", "Haydee", "Arbeito");
+
+		when(customerRepositoryMock.update(id, customer)).thenReturn(customer);
+
+		Customer updatedCustomer = eCommerceService.updateCustomer(id, customer);
+
+		assertThat(updatedCustomer, not(equalTo(previousCustomer)));
+		assertThat(updatedCustomer.getId(), equalTo(previousCustomer.getId()));
+		assertTrue(updatedCustomer.getEmail().equals("bb@bb.se"));
+
+		verify(customerRepositoryMock).update(id, customer);
+	}
+	
 	//ta bort en customer
 		
 	@Test
@@ -211,8 +236,10 @@ public class ECommerceServiceTest
 
 		verify(orderRepositoryMock).read(id);
 	}
+	
 	//Todo hämta alla order
 	//todo hämta alla order för en viss användare
+	
 	@Test
 	public void shouldCreateOrder() throws CustomerRegistrationException, PaymentException
 	{
@@ -230,7 +257,37 @@ public class ECommerceServiceTest
 		verify(idGeneratorMock).getGeneratedId();
 		verify(orderRepositoryMock).create(order1);
 	}
-	//Updatera en order
+	
+	@Test
+	public void shouldUpdateOrder() throws ProductRegistrationException, RepositoryException
+	{
+		Product product1 = new Product(id, "Schampo", 10.00, 10);
+		Product product2 = new Product(id, "Lyxig Schampo", 20.00, 20);
+		
+		ShoppingCart previousShoppingCart = new ShoppingCart();
+		previousShoppingCart.getProducts().add(product1);
+		previousShoppingCart.getProducts().add(product2);
+		
+		ShoppingCart updatedShoppingCart = new ShoppingCart();
+		updatedShoppingCart.getProducts().addAll(previousShoppingCart.getProducts());
+		updatedShoppingCart.getProducts().remove(0);
+		
+		Order previousOrder = new Order(id, customer, previousShoppingCart);
+		Order order = new Order(id, customer, updatedShoppingCart);
+		
+		when(orderRepositoryMock.update(id, order)).thenReturn(order);
+
+		Order updatedOrder = eCommerceService.updateOrder(id, order);
+
+		assertThat(updatedOrder, not(equalTo(previousOrder)));
+		assertThat(updatedOrder.getId(), equalTo(previousOrder.getId()));
+		assertTrue(updatedOrder.getShoppingCart().equals(updatedShoppingCart));
+		assertThat(previousOrder.getShoppingCart().getProducts(), hasSize(2));
+		assertThat(updatedOrder.getShoppingCart().getProducts(), hasSize(1));
+
+		verify(orderRepositoryMock).update(id, order);
+	}
+	
 	//ta bort en order
 		
 }

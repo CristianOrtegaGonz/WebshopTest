@@ -59,7 +59,7 @@ public final class Main
 			System.out.println(product);
 		}
 
-		eCommerceService.uppdateProduct(product1.getId(), product1);
+		eCommerceService.updateProduct(product1.getId(), product1);
 
 		System.out.println();
 		System.out.println("After update in disk\n-----------------------");
