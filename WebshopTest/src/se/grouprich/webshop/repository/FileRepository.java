@@ -6,8 +6,11 @@ import java.util.Map;
 import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.idgenerator.ECommerceIdGenerator;
 import se.grouprich.webshop.idgenerator.Identifiable;
+import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.repository.file.ECommerceFileInfo;
 import se.grouprich.webshop.repository.file.FileManager;
+import se.grouprich.webshop.validation.PasswordValidation;
+import se.grouprich.webshop.validation.Validator;
 
 public final class FileRepository<T extends Identifiable<String>> implements Repository<String, T>
 {
@@ -65,5 +68,26 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	public Map<String, T> getAll()
 	{
 		return values;
-	}	
+	}
+
+	@Override
+	public boolean emailExists(String email) 
+	{
+		for (T customer : values.values())
+		{
+			if (((Customer) customer).getEmail().equals(email))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean passwordValidator(String password) 
+	{
+		Validator passwordValidation = new PasswordValidation();
+		
+		return passwordValidation.validatePassword(password);
+	}
 }

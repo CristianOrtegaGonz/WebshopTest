@@ -13,6 +13,8 @@ import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.FileRepository;
 import se.grouprich.webshop.repository.Repository;
+import se.grouprich.webshop.validation.PasswordValidation;
+import se.grouprich.webshop.validation.Validator;
 
 public final class ECommerceService
 {
@@ -42,17 +44,24 @@ public final class ECommerceService
 		return productRepository;
 	}
 
-	public void registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
+	public Customer registerCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
-		for (Customer customer : customerRepository.getAll().values())
+		Validator validator = new PasswordValidation();
+		if (customerRepository.emailExists(email))
 		{
-			if (customer.getEmail().equals(email))
-			{
 				throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
-			}
 		}
+		
+		if(!validator.validatePassword(password))
+		{
+			throw new CustomerRegistrationException("The password must contain at least a capital letter,"
+					+ " two numbers and a special sign.");
+		}
+		
 		Customer customer = new Customer(email, password, firstName, lastName);
 		customerRepository.create(customer);
+		
+		return customer;
 	}
 
 	public void registerProduct(String productName, double price, int stockQuantity) throws ProductRegistrationException, RepositoryException
