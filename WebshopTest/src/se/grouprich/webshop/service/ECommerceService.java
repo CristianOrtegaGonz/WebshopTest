@@ -13,6 +13,7 @@ import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
 import se.grouprich.webshop.service.validation.CustomerValidator;
 import se.grouprich.webshop.service.validation.DuplicateValidator;
+import se.grouprich.webshop.service.validation.EmailValidator;
 import se.grouprich.webshop.service.validation.PasswordValidator;
 import se.grouprich.webshop.service.validation.ProductValidator;
 
@@ -25,6 +26,7 @@ public final class ECommerceService
 	private final PasswordValidator passwordValidator;
 	private final DuplicateValidator customerDuplicateValidator;
 	private final DuplicateValidator productDuplicateValidator;
+	private final EmailValidator emailValidator;
 
 	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository,
 			IdGenerator<String> idGenerator, PasswordValidator eCommerceValidator)
@@ -36,6 +38,7 @@ public final class ECommerceService
 		this.passwordValidator = eCommerceValidator;
 		customerDuplicateValidator = new CustomerValidator();
 		productDuplicateValidator = new ProductValidator();
+		emailValidator = new CustomerValidator();
 	}
 
 	public Repository<String, Order> getOrderRepository()
@@ -85,7 +88,7 @@ public final class ECommerceService
 		{
 			throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
 		}
-		if (email.length() > 30)
+		if (emailValidator.emailLengthInRange(email))
 		{
 			throw new CustomerRegistrationException("Email address that is longer than 30 characters is not allowed");
 		}

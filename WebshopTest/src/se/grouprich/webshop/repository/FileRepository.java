@@ -5,6 +5,7 @@ import java.util.Map;
 
 import se.grouprich.webshop.exception.RepositoryException;
 import se.grouprich.webshop.idgenerator.Identifiable;
+import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.repository.file.ECommerceFileInfo;
 import se.grouprich.webshop.repository.file.FileManager;
 
@@ -65,5 +66,17 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	public Map<String, T> getAll()
 	{
 		return values;
+	}
+
+	@Override
+	public boolean emailExists(String email) {
+		for (T customer : values.values())
+		{
+			if (((Customer) customer).getEmail().equals(email))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
