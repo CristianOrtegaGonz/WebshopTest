@@ -4,7 +4,7 @@ import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.repository.FileRepository;
 import se.grouprich.webshop.repository.Repository;
 
-public class ProductValidator implements DuplicateValidator
+public final class ProductValidator implements DuplicateValidator
 {
 	private Repository<String, Product> productRepository;
 	
