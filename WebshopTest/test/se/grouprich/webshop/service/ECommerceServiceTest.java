@@ -79,7 +79,6 @@ public class ECommerceServiceTest
 		exception.expect(OrderException.class);
 		exception.expectMessage(equalTo("Shopping cart is empty"));
 
-		Customer customer = new Customer(id, email, password, firstName, lastName);
 		ShoppingCart shoppingCart = new ShoppingCart();
 
 		eCommerceService.checkOut(customer, shoppingCart);
@@ -104,19 +103,16 @@ public class ECommerceServiceTest
 		exception.expect(PaymentException.class);
 		exception.expectMessage(equalTo("We can not accept the total price exceeding SEK 50,000"));
 
-		ShoppingCart shoppingCart = new ShoppingCart();
 		shoppingCart.setTotalPrice(50001.00);
-		Order order = new Order(null, null, shoppingCart);
+		Order order = new Order(id, customer, shoppingCart);
 
 		eCommerceService.createOrder(order);
-
-		assertTrue(shoppingCart.getTotalPrice() > 50000);
 	}
 
 	@Test
 	public void shouldFetchOrderById() throws PaymentException, RepositoryException
 	{
-		Order order1 = new Order(id, null, null);
+		Order order1 = new Order(id, customer, shoppingCart);
 		when(orderRepositoryMock.read(id)).thenReturn(order1);
 
 		Order order2 = eCommerceService.fetchOrder(id);
