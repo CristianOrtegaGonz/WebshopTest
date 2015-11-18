@@ -16,6 +16,7 @@ import se.grouprich.webshop.repository.Repository;
 import se.grouprich.webshop.service.ECommerceService;
 import se.grouprich.webshop.service.validation.CustomerValidator;
 import se.grouprich.webshop.service.validation.DuplicateValidator;
+import se.grouprich.webshop.service.validation.EmailValidator;
 import se.grouprich.webshop.service.validation.PasswordValidator;
 import se.grouprich.webshop.service.validation.ProductValidator;
 
@@ -29,10 +30,12 @@ public final class Main
 		Repository<String, Order> fileOrderRepository = new FileRepository<Order>(Order.class);
 		IdGenerator<String> idGenerator = new ECommerceIdGenerator();
 		PasswordValidator eCommerceValidator = new CustomerValidator();
+		DuplicateValidator customerDuplicateValidator = new CustomerValidator();
 		DuplicateValidator productDuplicateValidator = new ProductValidator();
+		EmailValidator emailValidator = new CustomerValidator();
 	
 		ECommerceService eCommerceService = new ECommerceService(fileOrderRepository, fileCustomerRepository,
-				fileProductRepository, idGenerator, eCommerceValidator, productDuplicateValidator);
+				fileProductRepository, idGenerator, eCommerceValidator, customerDuplicateValidator, productDuplicateValidator, emailValidator);
 
 		Customer customer1 = eCommerceService.createCustomer("arbieto@mail.com", "Arbieto12*", "Haydee", "DeAlvarado");
 		Customer customer2 = eCommerceService.createCustomer("qqqq@mail.com", "Q#qq32", "hahaha", "hohoho");

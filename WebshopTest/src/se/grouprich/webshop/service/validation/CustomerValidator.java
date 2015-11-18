@@ -4,7 +4,7 @@ import se.grouprich.webshop.model.Customer;
 import se.grouprich.webshop.repository.FileRepository;
 import se.grouprich.webshop.repository.Repository;
 
-public final class CustomerValidator implements PasswordValidator, DuplicateValidator
+public final class CustomerValidator implements PasswordValidator, DuplicateValidator, EmailValidator
 {
 	private boolean digits;
 	private boolean versal;
@@ -27,7 +27,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 		{
 			return false;
 		}
-		
+
 		for (int i = 0; i < password.length(); i++)
 		{
 			// check that in password contains only letters, numbers and
@@ -70,4 +70,15 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 		}
 		return false;
 	}
+
+	@Override
+	public boolean isLengthWithinRange(String email)
+	{
+		if (email.length() < 30)
+		{
+			return true;
+		}
+		return false;
+	}
+
 }

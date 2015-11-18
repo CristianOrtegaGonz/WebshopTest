@@ -11,10 +11,9 @@ import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
-import se.grouprich.webshop.service.validation.CustomerValidator;
 import se.grouprich.webshop.service.validation.DuplicateValidator;
+import se.grouprich.webshop.service.validation.EmailValidator;
 import se.grouprich.webshop.service.validation.PasswordValidator;
-import se.grouprich.webshop.service.validation.ProductValidator;
 
 public final class ECommerceService
 {
@@ -25,17 +24,19 @@ public final class ECommerceService
 	private final PasswordValidator passwordValidator;
 	private final DuplicateValidator customerDuplicateValidator;
 	private final DuplicateValidator productDuplicateValidator;
+	private final EmailValidator emailValidator;
 
 	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository,
-			IdGenerator<String> idGenerator, PasswordValidator eCommerceValidator, DuplicateValidator productDuplicateValidator)
+			IdGenerator<String> idGenerator, PasswordValidator passwordValidator, DuplicateValidator customerDuplicateValidator, DuplicateValidator productDuplicateValidator, EmailValidator emailValidator)
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
 		this.productRepository = productRepository;
 		this.idGenerator = idGenerator;
-		this.passwordValidator = eCommerceValidator;
+		this.passwordValidator = passwordValidator;
+		this.customerDuplicateValidator = customerDuplicateValidator;
 		this.productDuplicateValidator = productDuplicateValidator;
-		customerDuplicateValidator = new CustomerValidator();
+		this.emailValidator = emailValidator;
 	}
 
 	public Repository<String, Order> getOrderRepository()
@@ -58,19 +59,24 @@ public final class ECommerceService
 		return idGenerator;
 	}
 
-	public PasswordValidator geteCommerceValidator()
+	public PasswordValidator getPasswordValidator()
 	{
 		return passwordValidator;
 	}
 
-	public DuplicateValidator getDuplicateValidator()
+	public DuplicateValidator getCustomerDuplicateValidator()
 	{
 		return customerDuplicateValidator;
 	}
-
+	
 	public DuplicateValidator getProductDuplicateValidator()
 	{
 		return productDuplicateValidator;
+	}
+	
+	public EmailValidator getEmailValidator()
+	{
+		return emailValidator;
 	}
 
 	public ShoppingCart createShoppingCart()
