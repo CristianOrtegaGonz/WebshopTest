@@ -1,4 +1,4 @@
-package se.grouprich.webshop.service.service;
+package se.grouprich.webshop.service;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;

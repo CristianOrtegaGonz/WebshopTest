@@ -23,7 +23,6 @@ import se.grouprich.webshop.model.Order;
 import se.grouprich.webshop.model.Product;
 import se.grouprich.webshop.model.ShoppingCart;
 import se.grouprich.webshop.repository.Repository;
-import se.grouprich.webshop.service.service.ECommerceService;
 import se.grouprich.webshop.service.validation.DuplicateValidator;
 import se.grouprich.webshop.service.validation.EmailValidator;
 import se.grouprich.webshop.service.validation.PasswordValidator;
