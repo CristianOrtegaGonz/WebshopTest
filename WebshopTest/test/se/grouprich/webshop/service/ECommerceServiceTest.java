@@ -155,7 +155,7 @@ public class ECommerceServiceTest
 
 		Product product2 = eCommerceService.fetchProduct(id);
 
-		assertSame(product1, product2);
+		assertEquals(product1, product2);
 
 		verify(productRepositoryMock).read(id);
 	}
@@ -195,7 +195,7 @@ public class ECommerceServiceTest
 	}
 
 	@Test
-	public void shouldDeleteProduct() throws ProductRegistrationException
+	public void shouldDeleteProduct() throws ProductRegistrationException, RepositoryException
 	{
 		Product product1 = new Product(id, "Schampo", 10.00, 10);
 
@@ -214,7 +214,7 @@ public class ECommerceServiceTest
 
 		Customer customer2 = eCommerceService.fetchCustomer(id);
 
-		assertSame(customer1, customer2);
+		assertEquals(customer1, customer2);
 
 		verify(customerRepositoryMock).read(id);
 	}
@@ -258,7 +258,7 @@ public class ECommerceServiceTest
 		verify(customerRepositoryMock).update(id, customer);
 	}
 
-	public void shouldDeleteCustomer() throws CustomerRegistrationException
+	public void shouldDeleteCustomer() throws CustomerRegistrationException, RepositoryException
 	{
 		Customer customer1 = new Customer(id, email, password, firstName, lastName);
 
@@ -277,7 +277,7 @@ public class ECommerceServiceTest
 
 		Order order2 = eCommerceService.fetchOrder(id);
 
-		assertSame(order1, order2);
+		assertEquals(order1, order2);
 
 		verify(orderRepositoryMock).read(id);
 	}

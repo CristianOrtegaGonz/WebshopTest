@@ -32,16 +32,17 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	}
 
 	@Override
-	public T delete(String id)
+	public T delete(String id) throws RepositoryException
 	{
 		T deletedValue = null;
 		if (values.containsKey(id))
 		{
 			deletedValue = values.get(id);
 			values.remove(id);
+			fileInfo.createFile(values);
+			return deletedValue;
 		}
-		fileInfo.createFile(values);
-		return deletedValue;
+		throw new RepositoryException("Id does not exists");	
 	}
 
 	@Override
@@ -50,9 +51,10 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		if (values.containsKey(id))
 		{
 			values.replace(id, value);
+			fileInfo.createFile(values);
+			return value;
 		}
-		fileInfo.createFile(values);
-		return value;
+		throw new RepositoryException("Id does not exists");
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 		{
 			return values.get(id);
 		}
-		throw new RepositoryException("Id does not exists");
+		throw new RepositoryException("Id does not exists");	
 	}
 
 	@Override
