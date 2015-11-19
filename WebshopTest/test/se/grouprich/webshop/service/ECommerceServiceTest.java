@@ -119,16 +119,17 @@ public class ECommerceServiceTest
 		exception.expectMessage(equalTo("Password must have at least an uppercase letter, "
 				+ "two digits and a special character such as !@#$%^&*(){}[]"));
 
+		String password = "1";
 		when(duplicateValidatorMock.alreadyExsists(email)).thenReturn(false);
 		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(true);
-		when(passwordValidatorMock.isValidPassword("1")).thenReturn(false);
+		when(passwordValidatorMock.isValidPassword(password)).thenReturn(false);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 
-		eCommerceService.createCustomer(email, "1", firstName, lastName);
+		eCommerceService.createCustomer(email, password, firstName, lastName);
 
 		verify(duplicateValidatorMock).alreadyExsists(email);
 		verify(emailValidatorMock).isLengthWithinRange(email);
-		verify(passwordValidatorMock).isValidPassword("1");
+		verify(passwordValidatorMock).isValidPassword(password);
 		verify(idGeneratorMock).getGeneratedId();
 	}
 
@@ -200,22 +201,21 @@ public class ECommerceServiceTest
 	public void shouldUpdateProduct() throws ProductRegistrationException, RepositoryException
 	{
 		Product previousProduct = new Product(id, "Schampo", 10.00, 10);
-		Product product = new Product(id, "Lyxig Schampo", 20.00, 20);
+		Product product = new Product(id, "Lyx Schampo", 20.00, 20);
 
 		when(productRepositoryMock.update(id, product)).thenReturn(product);
 
 		Product updatedProduct = eCommerceService.updateProduct(id, product);
 
 		assertThat(updatedProduct, not(equalTo(previousProduct)));
-		assertThat(updatedProduct.getId(), equalTo(previousProduct.getId()));
-		assertTrue(updatedProduct.getProductName().equals("Lyxig Schampo"));
+		assertThat(updatedProduct.getId(), is(equalTo(previousProduct.getId())));
+		assertThat(updatedProduct.getProductName(), is(equalTo("Lyx Schampo")));
 
 		verify(productRepositoryMock).update(id, product);
 	}
 
 	@Test
 	public void shouldDeleteProduct() throws ProductRegistrationException, RepositoryException
-
 	{
 		Product product1 = new Product(id, "Schampo", 10.00, 10);
 
@@ -290,8 +290,8 @@ public class ECommerceServiceTest
 		Customer updatedCustomer = eCommerceService.updateCustomer(id, customer);
 
 		assertThat(updatedCustomer, not(equalTo(previousCustomer)));
-		assertThat(updatedCustomer.getId(), equalTo(previousCustomer.getId()));
-		assertTrue(updatedCustomer.getEmail().equals("bb@bb.se"));
+		assertThat(updatedCustomer.getId(), is(equalTo(previousCustomer.getId())));
+		assertThat(updatedCustomer.getEmail(), is(equalTo("bb@bb.se")));
 
 		verify(customerRepositoryMock).update(id, customer);
 	}
@@ -365,10 +365,9 @@ public class ECommerceServiceTest
 
 		List<Order> ordersByCustomer = eCommerceService.fetchOrdersByCustomer(customer);
 
-		boolean listsAreSame = (ordersByCustomer.size() == 2);
+		assertThat(ordersByCustomer, hasSize(2));
+		assertThat(ordersByCustomer, containsInAnyOrder(order1, order2));
 
-		assertTrue(listsAreSame);
-		
 		verify(orderRepositoryMock, times(1)).readAll();	
 	}
 
@@ -412,8 +411,8 @@ public class ECommerceServiceTest
 		Order updatedOrder = eCommerceService.updateOrder(id, order);
 
 		assertThat(updatedOrder, not(equalTo(previousOrder)));
-		assertThat(updatedOrder.getId(), equalTo(previousOrder.getId()));
-		assertTrue(updatedOrder.getShoppingCart().equals(updatedShoppingCart));
+		assertThat(updatedOrder.getId(), is(equalTo(previousOrder.getId())));
+		assertThat(updatedOrder.getShoppingCart(), is(equalTo(updatedShoppingCart)));
 		assertThat(previousOrder.getShoppingCart().getProducts(), hasSize(2));
 		assertThat(updatedOrder.getShoppingCart().getProducts(), hasSize(1));
 
