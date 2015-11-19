@@ -44,6 +44,10 @@ public final class Main
 		passwordValidator.isValidPassword("Aaa12&");
 		eCommerceService.updateCustomer(customer1.getId(), customer1);
 		
+		customer1.setEmail("arbeito@mail.se");
+		
+		eCommerceService.updateCustomer(customer1.getId(), customer1);
+
 		Product product1 = eCommerceService.createProduct("Shampoo", 20.00, 6);
 		Product product2 = eCommerceService.createProduct("Treatment", 20.00, 10);
 		Product product3 = eCommerceService.createProduct("Eco Shampoo", 30.00, 100);
