@@ -296,7 +296,7 @@ public class ECommerceServiceTest
 		orders.put(id, order1);
 		orders.put(id2, order2);
 		
-		when(orderRepositoryMock.getAll()).thenReturn(orders);
+		when(orderRepositoryMock.readAll()).thenReturn(orders);
 		
 		List<Order> ordersByCustomer = eCommerceService.fetchOrdersByCustomer(customer);
 		boolean listsAreSame = orders.containsValue(ordersByCustomer.get(0)) 

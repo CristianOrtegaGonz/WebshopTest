@@ -10,5 +10,5 @@ public interface Repository<K, T>
 	T delete(K value) throws RepositoryException;
 	T update(K id, T value) throws RepositoryException;
 	T read(K id) throws RepositoryException;
-	Map<K, T> getAll();
+	Map<K, T> readAll();
 }

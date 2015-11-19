@@ -16,7 +16,7 @@ public final class ProductValidator implements DuplicateValidator
 	@Override
 	public boolean alreadyExsists(String productName)
 	{
-		for (Product product : productRepository.getAll().values())
+		for (Product product : productRepository.readAll().values())
 		{
 			if (product.getProductName().equals(productName))
 			{

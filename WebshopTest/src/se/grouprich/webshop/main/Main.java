@@ -48,7 +48,7 @@ public final class Main
 
 		System.out.println();
 		System.out.println("Before update\n-----------------------");
-		for (Product product : fileProductRepository.getAll().values())
+		for (Product product : fileProductRepository.readAll().values())
 		{
 			System.out.println(product);
 		}
@@ -57,7 +57,7 @@ public final class Main
 
 		System.out.println();
 		System.out.println("After update in memory\n-----------------------");
-		for (Product product : fileProductRepository.getAll().values())
+		for (Product product : fileProductRepository.readAll().values())
 		{
 			System.out.println(product);
 		}
@@ -66,7 +66,7 @@ public final class Main
 
 		System.out.println();
 		System.out.println("After update in disk\n-----------------------");
-		for (Product product : fileProductRepository.getAll().values())
+		for (Product product : fileProductRepository.readAll().values())
 		{
 			System.out.println(product);
 		}
@@ -86,7 +86,7 @@ public final class Main
 		
 		eCommerceService.createOrder(eCommerceService.checkOut(customer1, shoppingCart1));
 		
-		System.out.println("Order list: " + fileOrderRepository.getAll().toString());
+		System.out.println("Order list: " + fileOrderRepository.readAll().toString());
 
 		System.out.println();
 		System.out.println("Stock quantity of " + product1.getProductName() + ": " + product1.getStockQuantity());
@@ -97,7 +97,7 @@ public final class Main
 		System.out.println();
 		System.out.println("Before delete customer\n-----------------------");
 
-		for (Customer customer : fileCustomerRepository.getAll().values())
+		for (Customer customer : fileCustomerRepository.readAll().values())
 		{
 			System.out.println(customer);
 		}
@@ -106,7 +106,7 @@ public final class Main
 
 		System.out.println();
 		System.out.println("After delete customer\n-----------------------");
-		for (Customer customer : fileCustomerRepository.getAll().values())
+		for (Customer customer : fileCustomerRepository.readAll().values())
 		{
 			System.out.println(customer);
 		}
