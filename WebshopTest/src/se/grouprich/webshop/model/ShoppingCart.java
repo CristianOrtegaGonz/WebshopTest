@@ -9,7 +9,7 @@ import se.grouprich.webshop.exception.OrderException;
 public final class ShoppingCart implements Serializable
 {
 	private static final long serialVersionUID = 3865658878665558979L;
-	private List<Product> products;
+	private final List<Product> products;
 	private double totalPrice;
 
 	public ShoppingCart()
@@ -27,7 +27,7 @@ public final class ShoppingCart implements Serializable
 		return totalPrice;
 	}
 	
-	public void setTotalPrice(double totalPrice)
+	public void setTotalPrice(final double totalPrice)
 	{
 		this.totalPrice = totalPrice;
 	}
@@ -37,19 +37,19 @@ public final class ShoppingCart implements Serializable
 		totalPrice = 0;
 		for (Product product : products)
 		{
-			totalPrice = totalPrice + (product.getPrice() * product.getOrderQuantity());
+			totalPrice += (product.getPrice() * product.getOrderQuantity());
 		}
 		return totalPrice;
 	}
 	
-	public void addProductInShoppingCart(Product product, int orderQuantity) throws OrderException
+	public void addProductInShoppingCart(final Product product, final int orderQuantity) throws OrderException
 	{
 		products.add(product);
 		product.setOrderQuantity(orderQuantity);
 		calculateTotalPrice();
 	}
 
-	public void deleteOneProduct(Product product) throws OrderException
+	public void deleteOneProduct(final Product product) throws OrderException
 	{
 		if (!products.contains(product))
 		{
@@ -59,7 +59,7 @@ public final class ShoppingCart implements Serializable
 		calculateTotalPrice();
 	}
 
-	public void emptyShoppingCart(List<Product> products)
+	public void emptyShoppingCart(final List<Product> products)
 	{
 		products.removeAll(products);
 		calculateTotalPrice();

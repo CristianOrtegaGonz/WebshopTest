@@ -31,7 +31,8 @@ public class OrderTest
 		shoppingCart2 = new ShoppingCart();
 		
 		order1 = new Order("100", customer1, shoppingCart1);
-		order2 = new Order("100", customer2, shoppingCart2);		
+		order2 = new Order("100", customer2, shoppingCart2);
+		
 		assertEquals("Two orders with same product och total price should be equal", order1, order2); 
 	}
 	
@@ -43,6 +44,7 @@ public class OrderTest
 		
 		shoppingCart1 = new ShoppingCart();
 		shoppingCart2 = new ShoppingCart();
+		
 		order1 = new Order("100", customer1, shoppingCart1);
 		order2 = new Order("100", customer2, shoppingCart2);		
 		

@@ -28,7 +28,7 @@ public final class Order implements Serializable, Identifiable<String>
 	}
 
 	@Override
-	public void setId(String orderId)
+	public void setId(final String orderId)
 	{
 		this.orderId = orderId;
 	}
