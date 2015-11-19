@@ -1,7 +1,7 @@
 package se.grouprich.webshop.service;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 import java.util.HashMap;

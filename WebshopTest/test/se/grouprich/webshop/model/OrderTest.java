@@ -6,9 +6,6 @@ import org.junit.Test;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
-import se.grouprich.webshop.model.Customer;
-import se.grouprich.webshop.model.Order;
-import se.grouprich.webshop.model.ShoppingCart;
 
 public class OrderTest
 {

@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
-import se.grouprich.webshop.model.Customer;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerTest

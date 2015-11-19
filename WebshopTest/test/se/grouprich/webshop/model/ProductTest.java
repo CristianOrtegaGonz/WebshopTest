@@ -1,6 +1,7 @@
 package se.grouprich.webshop.model;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 
 import se.grouprich.webshop.exception.ProductRegistrationException;

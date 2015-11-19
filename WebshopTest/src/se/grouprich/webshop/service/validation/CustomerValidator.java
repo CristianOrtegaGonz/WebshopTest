@@ -10,6 +10,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 
 	public CustomerValidator()
 	{
+		
 		customerRepository = new FileRepository<>(Customer.class);
 	}
 
