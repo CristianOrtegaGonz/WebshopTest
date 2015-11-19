@@ -3,12 +3,9 @@ package se.grouprich.webshop.model;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 
-@RunWith(MockitoJUnitRunner.class)
 public class CustomerTest
 {
 	private Customer customer1, customer2;
