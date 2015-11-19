@@ -296,6 +296,7 @@ public class ECommerceServiceTest
 		verify(customerRepositoryMock).update(id, customer);
 	}
 
+	@Test
 	public void shouldDeleteCustomer() throws CustomerRegistrationException, RepositoryException
 	{
 		Customer customer1 = new Customer(id, email, password, firstName, lastName);
