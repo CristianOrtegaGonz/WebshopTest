@@ -351,6 +351,15 @@ public class ECommerceServiceTest
 		verify(orderRepositoryMock).update(id, order);
 	}
 
-	// ta bort en order
+	@Test
+	public void shouldDeleteOrder() throws OrderException, RepositoryException
+	{
+		Order order1 = new Order(id, customer, shoppingCart);
 
+		when(orderRepositoryMock.delete(id)).thenReturn(order1);
+
+		Order order2 = eCommerceService.deleteOrder(id);
+
+		assertSame(order1, order2);
+	}
 }
