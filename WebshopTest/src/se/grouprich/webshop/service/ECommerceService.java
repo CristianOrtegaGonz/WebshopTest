@@ -137,19 +137,19 @@ public final class ECommerceService
 		return orderRepository.create(order);
 	}
 
-	public void deleteCustomer(String customerId)
+	public Customer deleteCustomer(String customerId)
 	{
-		customerRepository.delete(customerId);
+		return customerRepository.delete(customerId);
 	}
 
-	public void deleteOrder(String orderId)
+	public Order deleteOrder(String orderId)
 	{
-		orderRepository.delete(orderId);
+		return orderRepository.delete(orderId);
 	}
 
-	public void deleteProduct(String productId)
+	public Product deleteProduct(String productId)
 	{
-		productRepository.delete(productId);
+		return productRepository.delete(productId);
 	}
 
 	public Customer updateCustomer(String customerId, Customer customer) throws RepositoryException

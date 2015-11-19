@@ -201,7 +201,7 @@ public class ECommerceServiceTest
 
 		when(productRepositoryMock.delete(id)).thenReturn(product1);
 
-		Product product2 = productRepositoryMock.delete(id);
+		Product product2 = eCommerceService.deleteProduct(id);
 
 		assertSame(product1, product2);
 	}
@@ -264,7 +264,7 @@ public class ECommerceServiceTest
 
 		when(customerRepositoryMock.delete(id)).thenReturn(customer1);
 
-		Customer customer2 = customerRepositoryMock.delete(id);
+		Customer customer2 = eCommerceService.deleteCustomer(id);
 
 		assertSame(customer1, customer2);
 	}
