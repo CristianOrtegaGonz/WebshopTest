@@ -196,6 +196,7 @@ public class ECommerceServiceTest
 
 	@Test
 	public void shouldDeleteProduct() throws ProductRegistrationException, RepositoryException
+
 	{
 		Product product1 = new Product(id, "Schampo", 10.00, 10);
 
@@ -277,7 +278,7 @@ public class ECommerceServiceTest
 
 		Order order2 = eCommerceService.fetchOrder(id);
 
-		assertEquals(order1, order2);
+		assertSame(order1, order2);
 
 		verify(orderRepositoryMock).read(id);
 	}
