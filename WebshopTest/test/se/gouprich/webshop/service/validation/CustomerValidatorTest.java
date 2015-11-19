@@ -40,10 +40,19 @@ public class CustomerValidatorTest
 	@Test
 	public void passwordShouldHaveAtLeastOneVersalTwoNumbersAndOneSpecialCharacter()
 	{
-		String password = "Aa12&";
+		String password1 = "Aa12&";
+		String password2 = "aa12&";
+		String password3 = "Aaa2&";
+		String password4 = "Aa122";
 		
-		boolean valid = customerValidator.isValidPassword(password);
+		boolean valid1 = customerValidator.isValidPassword(password1);
+		boolean valid2 = customerValidator.isValidPassword(password2);
+		boolean valid3 = customerValidator.isValidPassword(password3);
+		boolean valid4 = customerValidator.isValidPassword(password4);
 		
-		assertTrue(valid);	
+		assertTrue(valid1);
+		assertFalse(valid2);
+		assertFalse(valid3);
+		assertFalse(valid4);
 	}
 }

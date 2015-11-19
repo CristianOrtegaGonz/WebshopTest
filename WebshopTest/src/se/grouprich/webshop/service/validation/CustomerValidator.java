@@ -6,23 +6,20 @@ import se.grouprich.webshop.repository.Repository;
 
 public final class CustomerValidator implements PasswordValidator, DuplicateValidator, EmailValidator
 {
-	private boolean digits;
-	private boolean versal;
-	private boolean specialCharacter;
-	private int counterNumbers;
 	private Repository<String, Customer> customerRepository;
 
 	public CustomerValidator()
 	{
-		digits = false;
-		versal = false;
-		specialCharacter = false;
-		counterNumbers = 0;
 		customerRepository = new FileRepository<>(Customer.class);
 	}
 
 	public boolean isValidPassword(final String password)
 	{
+		boolean digits = false;
+		boolean versal = false;
+		boolean specialCharacter = false;
+		int counterNumbers = 0;
+		
 		if (password == null || password.trim().isEmpty())
 		{
 			return false;

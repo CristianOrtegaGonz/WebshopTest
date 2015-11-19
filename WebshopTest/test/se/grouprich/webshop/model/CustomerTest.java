@@ -2,9 +2,7 @@ package se.grouprich.webshop.model;
 
 import static org.junit.Assert.*;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
@@ -14,9 +12,6 @@ import se.grouprich.webshop.model.Customer;
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerTest
 {
-	@Rule
-	public ExpectedException exception = ExpectedException.none();
-
 	private Customer customer1, customer2;
 
 	@Test

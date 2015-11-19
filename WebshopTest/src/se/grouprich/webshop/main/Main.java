@@ -29,16 +29,20 @@ public final class Main
 		Repository<String, Customer>  fileCustomerRepository = new FileRepository<Customer>(Customer.class);
 		Repository<String, Order> fileOrderRepository = new FileRepository<Order>(Order.class);
 		IdGenerator<String> idGenerator = new ECommerceIdGenerator();
-		PasswordValidator eCommerceValidator = new CustomerValidator();
+		PasswordValidator passwordValidator = new CustomerValidator();
 		DuplicateValidator customerDuplicateValidator = new CustomerValidator();
 		DuplicateValidator productDuplicateValidator = new ProductValidator();
 		EmailValidator emailValidator = new CustomerValidator();
 	
 		ECommerceService eCommerceService = new ECommerceService(fileOrderRepository, fileCustomerRepository,
-				fileProductRepository, idGenerator, eCommerceValidator, customerDuplicateValidator, productDuplicateValidator, emailValidator);
+				fileProductRepository, idGenerator, passwordValidator, customerDuplicateValidator, productDuplicateValidator, emailValidator);
 
-		Customer customer1 = eCommerceService.createCustomer("arbieto@mail.com", "Arbieto12*", "Haydee", "DeAlvarado");
+		Customer customer1 = eCommerceService.createCustomer("Aaa12&", "Arbieto12*", "Haydee", "DeAlvarado");
 		Customer customer2 = eCommerceService.createCustomer("qqqq@mail.com", "Q#qq32", "hahaha", "hohoho");
+
+		customer1.setEmail("arbeito@mail.se");
+		passwordValidator.isValidPassword("Aaa12&");
+		eCommerceService.updateCustomer(customer1.getId(), customer1);
 		
 		customer1.setEmail("arbeito@mail.se");
 		
@@ -47,7 +51,7 @@ public final class Main
 		Product product1 = eCommerceService.createProduct("Shampoo", 20.00, 6);
 		Product product2 = eCommerceService.createProduct("Treatment", 20.00, 10);
 		Product product3 = eCommerceService.createProduct("Eco Shampoo", 30.00, 100);
-
+		
 		ShoppingCart shoppingCart1 = eCommerceService.createShoppingCart();
 
 		System.out.println();

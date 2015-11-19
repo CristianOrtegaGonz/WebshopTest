@@ -1,10 +1,7 @@
 package se.grouprich.webshop.model;
 
 import static org.junit.Assert.*;
-
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import se.grouprich.webshop.exception.ProductRegistrationException;
 
@@ -12,9 +9,6 @@ public class ProductTest
 {
 	private Product product1, product2;
 
-	@Rule
-	public ExpectedException exception = ExpectedException.none();
-	
 	@Test
 	public void productWithIdenticalValuesShouldBeEqual() throws ProductRegistrationException 
 	{
