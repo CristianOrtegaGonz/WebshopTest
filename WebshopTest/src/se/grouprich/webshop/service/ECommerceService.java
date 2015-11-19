@@ -1,5 +1,8 @@
 package se.grouprich.webshop.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
 import se.grouprich.webshop.exception.PaymentException;
@@ -180,6 +183,19 @@ public final class ECommerceService
 	public Product fetchProduct(String productId) throws RepositoryException
 	{
 		return productRepository.read(productId);
+	}
+	
+	public List<Order> fetchOrdersByCustomer(Customer customer)
+	{
+		List<Order> ordersByCustomer = new ArrayList<>();
+		for (Order value : (orderRepository.getAll()).values())
+		{
+			if(value.getCustomer().equals(customer))
+			{
+				ordersByCustomer.add(value);
+			}
+		}
+		return ordersByCustomer;
 	}
 
 	public void addProductInShoppingCart(ShoppingCart shoppingCart, String productId, int orderQuantity) throws RepositoryException, OrderException

@@ -4,6 +4,10 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -108,10 +112,6 @@ public class ECommerceServiceTest
 		verify(idGeneratorMock).getGeneratedId();
 	}
 
-	// lagt till Mockar i koden och ändrat returvärdet av
-	// emailValidatorMock.isLengthWithinRange(email)
-	// till true så att den kommer ner till passwordValidation. satte dåligt
-	// password som ska faila
 	@Test
 	public void customerShouldHavePasswordWithTwoVersalTwoNumbersSpecialCharacter() throws CustomerRegistrationException
 	{
@@ -284,7 +284,24 @@ public class ECommerceServiceTest
 	}
 
 	// Todo hämta alla order
-	// todo hämta alla order för en viss användare
+	@Test
+	public void shouldFetchOrdersByCustomer()
+	{
+		String id2 = "1003";
+		Order order1 = new Order(id, customer, shoppingCart);
+		Order order2 = new Order(id2, customer, shoppingCart);
+		Map<String, Order> orders = new HashMap<>();
+		orders.put(id, order1);
+		orders.put(id2, order2);
+		
+		when(orderRepositoryMock.getAll()).thenReturn(orders);
+		
+		List<Order> ordersByCustomer = eCommerceService.fetchOrdersByCustomer(customer);
+		boolean listsAreSame = orders.containsValue(ordersByCustomer.get(0)) 
+				&& orders.containsValue(ordersByCustomer.get(1));
+		
+		assertEquals(true, listsAreSame);
+	}
 
 	@Test
 	public void shouldCreateOrder() throws CustomerRegistrationException, PaymentException
