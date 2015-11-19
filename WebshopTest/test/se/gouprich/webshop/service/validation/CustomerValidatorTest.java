@@ -18,7 +18,7 @@ public class CustomerValidatorTest
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	CustomerValidator customerValidator;
+	private CustomerValidator customerValidator;
 
 	@Before
 	public void setup()

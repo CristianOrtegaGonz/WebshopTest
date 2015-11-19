@@ -10,7 +10,7 @@ import se.grouprich.webshop.exception.ProductRegistrationException;
 
 public class ProductTest
 {
-	Product product1, product2;
+	private Product product1, product2;
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();

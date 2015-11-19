@@ -14,9 +14,9 @@ import se.grouprich.webshop.model.ShoppingCart;
 
 public class OrderTest
 {
-	Order order1, order2;
-	Customer customer1, customer2;
-	ShoppingCart shoppingCart1, shoppingCart2;
+	private Order order1, order2;
+	private Customer customer1, customer2;
+	private ShoppingCart shoppingCart1, shoppingCart2;
 	
 	@Rule
 	public ExpectedException exception = ExpectedException.none();

@@ -303,6 +303,8 @@ public class ECommerceServiceTest
 				&& orders.containsValue(ordersByCustomer.get(1));
 		
 		assertEquals(true, listsAreSame);
+		
+		verify(orderRepositoryMock, times(1)).readAll();
 	}
 
 	@Test
