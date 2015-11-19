@@ -21,7 +21,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 		customerRepository = new FileRepository<>(Customer.class);
 	}
 
-	public boolean isValidPassword(String password)
+	public boolean isValidPassword(final String password)
 	{
 		if (password == null || password.trim().isEmpty())
 		{
@@ -30,8 +30,6 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 
 		for (int i = 0; i < password.length(); i++)
 		{
-			// check that in password contains only letters, numbers and
-			// acceptable special characters
 			if (password.substring(i, i + 1).matches("[A-ZÅÖÄa-zåöä\\d\\p{Punct}]+"))
 			{
 				if (password.substring(i, i + 1).matches("\\d+"))
@@ -59,7 +57,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 	}
 
 	@Override
-	public boolean alreadyExsists(String email)
+	public boolean alreadyExsists(final String email)
 	{
 		for (Customer customer : customerRepository.readAll().values())
 		{
@@ -72,7 +70,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 	}
 
 	@Override
-	public boolean isLengthWithinRange(String email)
+	public boolean isLengthWithinRange(final String email)
 	{
 		if (email.length() <= 30)
 		{

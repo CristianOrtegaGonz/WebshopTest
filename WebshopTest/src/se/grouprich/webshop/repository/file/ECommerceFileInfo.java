@@ -10,9 +10,9 @@ import java.util.Map;
 
 public final class ECommerceFileInfo<T> implements FileManager<String, T>
 {
-	private String fileName;
+	private final String fileName;
 
-	public ECommerceFileInfo(Class<T> classType)
+	public ECommerceFileInfo(final Class<T> classType)
 	{
 		fileName = (classType.getSimpleName() + "s").toLowerCase();
 	}
@@ -64,7 +64,7 @@ public final class ECommerceFileInfo<T> implements FileManager<String, T>
 	}
 
 	@Override
-	public void createFile(Map<String, T> values)
+	public void createFile(final Map<String, T> values)
 	{
 		createDirectory();
 		try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(getPath())))
@@ -79,7 +79,7 @@ public final class ECommerceFileInfo<T> implements FileManager<String, T>
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readFile(Map<String, T> values)
+	public void readFile(final Map<String, T> values)
 	{
 		try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(getPath())))
 		{

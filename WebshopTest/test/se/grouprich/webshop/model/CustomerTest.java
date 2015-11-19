@@ -17,7 +17,7 @@ public class CustomerTest
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	Customer customer1, customer2;
+	private Customer customer1, customer2;
 
 	@Test
 	public void customerWithIdenticalValuesShouldBeEqual() throws CustomerRegistrationException 

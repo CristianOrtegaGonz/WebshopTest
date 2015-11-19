@@ -37,11 +37,11 @@ public class ECommerceServiceTest
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	@Mock(name = "orderRepository")
+	@Mock
 	private Repository<String, Order> orderRepositoryMock;
-	@Mock(name = "customerRepository")
+	@Mock
 	private Repository<String, Customer> customerRepositoryMock;
-	@Mock(name = "productRepository")
+	@Mock
 	private Repository<String, Product> productRepositoryMock;
 	@Mock
 	private IdGenerator<String> idGeneratorMock;
@@ -113,7 +113,7 @@ public class ECommerceServiceTest
 	}
 
 	@Test
-	public void customerShouldHavePasswordWithOneVersalTwoNumbersAndOneSpecialCharacter() throws CustomerRegistrationException
+	public void customerShouldHavePasswordWithAtLeastOneVersalTwoNumbersAndOneSpecialCharacter() throws CustomerRegistrationException
 	{
 		exception.expect(CustomerRegistrationException.class);
 		exception.expectMessage(equalTo("Password must have at least an uppercase letter, "
@@ -165,19 +165,20 @@ public class ECommerceServiceTest
 	{
 		Product product1 = new Product("id001", "Bord", 1000, 5);
 		Product product2 = new Product("id002", "Stol", 500, 10);
-		
+
 		Map<String, Product> products = new HashMap<>();
 		products.put(product1.getId(), product1);
 		products.put(product2.getId(), product2);
-		
+
 		when(productRepositoryMock.readAll()).thenReturn(products);
-		
+
 		Map<String, Product> allProducts = eCommerceService.fetchAllProducts();
+
+		assertThat(products, is(equalTo(allProducts)));
 		
 		verify(productRepositoryMock).readAll();
-		assertThat(products, is(equalTo(allProducts)));	
 	}
-	
+
 	@Test
 	public void shouldCreateProduct() throws ProductRegistrationException, RepositoryException
 	{
@@ -237,23 +238,24 @@ public class ECommerceServiceTest
 
 		verify(customerRepositoryMock).read(id);
 	}
-	
+
 	@Test
 	public void shouldFetchAllCustomers() throws CustomerRegistrationException
 	{
 		Customer customer1 = new Customer("id1", "email@email.com", "secret", "Lars", "Larsson");
 		Customer customer2 = new Customer("id2", "mail@mail.com", "secret1", "Per", "Persson");
-		
+
 		Map<String, Customer> customers = new HashMap<>();
 		customers.put(customer1.getId(), customer1);
 		customers.put(customer2.getId(), customer2);
-		
+
 		when(customerRepositoryMock.readAll()).thenReturn(customers);
-		
+
 		Map<String, Customer> allCustomers = eCommerceService.fetchAllCustomers();
+
+		assertThat(customers, is(equalTo(allCustomers)));
 		
 		verify(customerRepositoryMock).readAll();
-		assertThat(customers, is(equalTo(allCustomers)));	
 	}
 
 	@Test
@@ -303,6 +305,8 @@ public class ECommerceServiceTest
 		Customer customer2 = eCommerceService.deleteCustomer(id);
 
 		assertSame(customer1, customer2);
+		
+		verify(customerRepositoryMock).delete(id);
 	}
 
 	@Test
@@ -329,36 +333,43 @@ public class ECommerceServiceTest
 		shoppingCart.setTotalPrice(400);
 		Order order1 = new Order("id10", customer1, shoppingCart1);
 		Order order2 = new Order("id20", customer2, shoppingCart2);
-		
+
 		Map<String, Order> orders = new HashMap<>();
 		orders.put(order1.getId(), order1);
 		orders.put(order2.getId(), order2);
-		
+
 		when(orderRepositoryMock.readAll()).thenReturn(orders);
-		
+
 		Map<String, Order> allOrders = eCommerceService.fetchAllOrders();
+
+		assertThat(orders, is(equalTo(allOrders)));
 		
 		verify(orderRepositoryMock).readAll();
-		assertThat(orders, is(equalTo(allOrders)));		
 	}
-	
+
 	@Test
-	public void shouldFetchOrdersByCustomer()
+	public void shouldFetchOrdersByCustomer() throws CustomerRegistrationException
 	{
 		String id2 = "1003";
+		String id3 = "1004";
+		Customer customer1 = new Customer("1002", "mail@mail", "secret1", "name", "username");
 		Order order1 = new Order(id, customer, shoppingCart);
 		Order order2 = new Order(id2, customer, shoppingCart);
+		Order order3 = new Order(id3, customer1, shoppingCart);
 		Map<String, Order> orders = new HashMap<>();
 		orders.put(id, order1);
 		orders.put(id2, order2);
-		
+		orders.put(id3, order3);
+
 		when(orderRepositoryMock.readAll()).thenReturn(orders);
-		
+
 		List<Order> ordersByCustomer = eCommerceService.fetchOrdersByCustomer(customer);
-		boolean listsAreSame = orders.containsValue(ordersByCustomer.get(0)) 
-				&& orders.containsValue(ordersByCustomer.get(1));
-		
+
+		boolean listsAreSame = (ordersByCustomer.size() == 2);
+
 		assertTrue(listsAreSame);
+		
+		verify(orderRepositoryMock, times(1)).readAll();	
 	}
 
 	@Test
@@ -419,5 +430,7 @@ public class ECommerceServiceTest
 		Order order2 = eCommerceService.deleteOrder(id);
 
 		assertSame(order1, order2);
+		
+		verify(orderRepositoryMock).delete(id);
 	}
 }
