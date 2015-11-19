@@ -2,6 +2,7 @@ package se.grouprich.webshop.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
@@ -30,7 +31,8 @@ public final class ECommerceService
 	private final EmailValidator emailValidator;
 
 	public ECommerceService(Repository<String, Order> orderRepository, Repository<String, Customer> customerRepository, Repository<String, Product> productRepository,
-			IdGenerator<String> idGenerator, PasswordValidator passwordValidator, DuplicateValidator customerDuplicateValidator, DuplicateValidator productDuplicateValidator, EmailValidator emailValidator)
+			IdGenerator<String> idGenerator, PasswordValidator passwordValidator, DuplicateValidator customerDuplicateValidator,
+			DuplicateValidator productDuplicateValidator, EmailValidator emailValidator)
 	{
 		this.orderRepository = orderRepository;
 		this.customerRepository = customerRepository;
@@ -71,12 +73,12 @@ public final class ECommerceService
 	{
 		return customerDuplicateValidator;
 	}
-	
+
 	public DuplicateValidator getProductDuplicateValidator()
 	{
 		return productDuplicateValidator;
 	}
-	
+
 	public EmailValidator getEmailValidator()
 	{
 		return emailValidator;
@@ -117,7 +119,7 @@ public final class ECommerceService
 		Product product = new Product(id, productName, price, stockQuantity);
 		return productRepository.create(product);
 	}
-	
+
 	public Order checkOut(Customer customer, ShoppingCart shoppingCart) throws OrderException
 	{
 		if (shoppingCart.getProducts().isEmpty())
@@ -127,7 +129,7 @@ public final class ECommerceService
 		String id = null;
 		return new Order(id, customer, shoppingCart);
 	}
-	
+
 	public Order createOrder(Order order) throws PaymentException
 	{
 		if (order.getShoppingCart().getTotalPrice() > 50000.00)
@@ -184,13 +186,28 @@ public final class ECommerceService
 	{
 		return productRepository.read(productId);
 	}
-	
+
+	public Map<String, Customer> fetchAllCustomers()
+	{
+		return customerRepository.readAll();
+	}
+
+	public Map<String, Order> fetchAllOrders()
+	{
+		return orderRepository.readAll();
+	}
+
+	public Map<String, Product> fetchAllProducts()
+	{
+		return productRepository.readAll();
+	}
+
 	public List<Order> fetchOrdersByCustomer(Customer customer)
 	{
 		List<Order> ordersByCustomer = new ArrayList<>();
-		for (Order value : (orderRepository.getAll()).values())
+		for (Order value : (orderRepository.readAll()).values())
 		{
-			if(value.getCustomer().equals(customer))
+			if (value.getCustomer().equals(customer))
 			{
 				ordersByCustomer.add(value);
 			}
@@ -200,7 +217,7 @@ public final class ECommerceService
 
 	public void addProductInShoppingCart(ShoppingCart shoppingCart, String productId, int orderQuantity) throws RepositoryException, OrderException
 	{
-		if (productRepository.getAll().containsKey(productId))
+		if (productRepository.readAll().containsKey(productId))
 		{
 			Product product = productRepository.read(productId);
 			if (shoppingCart.getProducts().contains(product) && product.getStockQuantity() >= product.getOrderQuantity() + orderQuantity)
@@ -224,7 +241,7 @@ public final class ECommerceService
 
 	public void changeOrderQuantity(ShoppingCart shoppingCart, String productId, int orderQuantity) throws RepositoryException, OrderException
 	{
-		if (productRepository.getAll().containsKey(productId))
+		if (productRepository.readAll().containsKey(productId))
 		{
 			Product product = productRepository.read(productId);
 			if (shoppingCart.getProducts().contains(product) && product.getStockQuantity() >= orderQuantity)

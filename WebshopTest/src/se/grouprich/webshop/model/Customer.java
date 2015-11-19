@@ -30,7 +30,7 @@ public final class Customer implements Serializable, Identifiable<String>
 	}
 
 	@Override
-	public void setId(String customerId)
+	public void setId(final String customerId)
 	{
 		this.customerId = customerId;
 	}
@@ -45,12 +45,12 @@ public final class Customer implements Serializable, Identifiable<String>
 		return password;
 	}
 
-	public void setEmail(String email)
+	public void setEmail(final String email)
 	{
 		this.email = email;
 	}
 
-	public void setPassword(String password)
+	public void setPassword(final String password)
 	{
 		this.password = password;
 	}

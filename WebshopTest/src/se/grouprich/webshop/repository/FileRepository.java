@@ -68,7 +68,7 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	}
 
 	@Override
-	public Map<String, T> getAll()
+	public Map<String, T> readAll()
 	{
 		return values;
 	}
