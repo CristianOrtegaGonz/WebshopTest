@@ -110,7 +110,6 @@ public final class Main
 		{
 			System.out.println(customer);
 		}
-
 		System.out.println();
 	}
 }
