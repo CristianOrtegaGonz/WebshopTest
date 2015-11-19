@@ -258,7 +258,16 @@ public class ECommerceServiceTest
 		verify(customerRepositoryMock).update(id, customer);
 	}
 
-	// ta bort en customer
+	public void shouldDeleteCustomer() throws CustomerRegistrationException
+	{
+		Customer customer1 = new Customer(id, email, password, firstName, lastName);
+
+		when(customerRepositoryMock.delete(id)).thenReturn(customer1);
+
+		Customer customer2 = customerRepositoryMock.delete(id);
+
+		assertSame(customer1, customer2);
+	}
 
 	@Test
 	public void shouldFetchOrderById() throws PaymentException, RepositoryException
