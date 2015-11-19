@@ -47,7 +47,7 @@ public class ECommerceServiceTest
 	private DuplicateValidator duplicateValidatorMock;
 	@Mock
 	private EmailValidator emailValidatorMock;
-	
+
 	private ECommerceService eCommerceService;
 
 	private String email = "aa@aa.com";
@@ -107,22 +107,25 @@ public class ECommerceServiceTest
 
 		verify(idGeneratorMock).getGeneratedId();
 	}
-//	lagt till Mockar i koden och ändrat returvärdet av emailValidatorMock.isLengthWithinRange(email)
-//	till true så att den kommer ner till passwordValidation. satte dåligt password som ska faila
-	@Test 
+
+	// lagt till Mockar i koden och ändrat returvärdet av
+	// emailValidatorMock.isLengthWithinRange(email)
+	// till true så att den kommer ner till passwordValidation. satte dåligt
+	// password som ska faila
+	@Test
 	public void customerShouldHavePasswordWithTwoVersalTwoNumbersSpecialCharacter() throws CustomerRegistrationException
 	{
 		exception.expect(CustomerRegistrationException.class);
-		exception.expectMessage(equalTo("Password must have at least an uppercase letter,"
-				+ " two digits and a special character such as !@#$%^&*(){}[]"));
-		
+		exception.expectMessage(equalTo("Password must have at least an uppercase letter, "
+				+ "two digits and a special character such as !@#$%^&*(){}[]"));
+
 		when(duplicateValidatorMock.alreadyExsists(email)).thenReturn(false);
 		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(true);
 		when(passwordValidatorMock.isValidPassword("1")).thenReturn(false);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 
 		eCommerceService.createCustomer(email, "1", firstName, lastName);
-		
+
 		verify(duplicateValidatorMock).alreadyExsists(email);
 		verify(emailValidatorMock).isLengthWithinRange(email);
 		verify(passwordValidatorMock).isValidPassword("1");
@@ -134,13 +137,13 @@ public class ECommerceServiceTest
 	{
 		exception.expect(CustomerRegistrationException.class);
 		exception.expectMessage(equalTo("Email address that is longer than 30 characters is not allowed"));
-		
-		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(false);
-		
+
 		email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
-		
+
+		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(false);
+
 		eCommerceService.createCustomer(email, password, firstName, lastName);
-		
+
 		verify(emailValidatorMock).isLengthWithinRange(email);
 	}
 
@@ -152,7 +155,7 @@ public class ECommerceServiceTest
 
 		Product product2 = eCommerceService.fetchProduct(id);
 
-		assertEquals(product1, product2);
+		assertSame(product1, product2);
 
 		verify(productRepositoryMock).read(id);
 	}
@@ -167,7 +170,7 @@ public class ECommerceServiceTest
 
 		Product product2 = eCommerceService.createProduct(productName, price, stockQuantity);
 
-		assertEquals(product1, product2);
+		assertSame(product1, product2);
 
 		verify(duplicateValidatorMock).alreadyExsists(productName);
 		verify(idGeneratorMock).getGeneratedId();
@@ -190,7 +193,18 @@ public class ECommerceServiceTest
 
 		verify(productRepositoryMock).update(id, product);
 	}
-	// ta bort en product
+
+	@Test
+	public void shouldDeleteProduct() throws ProductRegistrationException
+	{
+		Product product1 = new Product(id, "Schampo", 10.00, 10);
+
+		when(productRepositoryMock.delete(id)).thenReturn(product1);
+
+		Product product2 = productRepositoryMock.delete(id);
+
+		assertSame(product1, product2);
+	}
 
 	@Test
 	public void shouldFetchCustomerById() throws CustomerRegistrationException, RepositoryException
@@ -200,7 +214,7 @@ public class ECommerceServiceTest
 
 		Customer customer2 = eCommerceService.fetchCustomer(id);
 
-		assertEquals(customer1, customer2);
+		assertSame(customer1, customer2);
 
 		verify(customerRepositoryMock).read(id);
 	}
@@ -215,11 +229,11 @@ public class ECommerceServiceTest
 		when(passwordValidatorMock.isValidPassword(password)).thenReturn(true);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 		when(customerRepositoryMock.create(customer1)).thenReturn(customer1);
-		
+
 		Customer customer2 = eCommerceService.createCustomer(email, password, firstName, lastName);
-		
-		assertEquals(customer1, customer2);
-		
+
+		assertSame(customer1, customer2);
+
 		verify(duplicateValidatorMock).alreadyExsists(email);
 		verify(emailValidatorMock).isLengthWithinRange(email);
 		verify(passwordValidatorMock).isValidPassword(password);
@@ -254,7 +268,7 @@ public class ECommerceServiceTest
 
 		Order order2 = eCommerceService.fetchOrder(id);
 
-		assertEquals(order1, order2);
+		assertSame(order1, order2);
 
 		verify(orderRepositoryMock).read(id);
 	}
@@ -274,7 +288,7 @@ public class ECommerceServiceTest
 
 		Order order2 = eCommerceService.createOrder(order1);
 
-		assertEquals(order1, order2);
+		assertSame(order1, order2);
 
 		verify(idGeneratorMock).getGeneratedId();
 		verify(orderRepositoryMock).create(order1);

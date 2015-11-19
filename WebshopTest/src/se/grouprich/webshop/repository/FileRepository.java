@@ -32,13 +32,16 @@ public final class FileRepository<T extends Identifiable<String>> implements Rep
 	}
 
 	@Override
-	public void delete(String id)
+	public T delete(String id)
 	{
+		T deletedValue = null;
 		if (values.containsKey(id))
 		{
+			deletedValue = values.get(id);
 			values.remove(id);
 		}
 		fileInfo.createFile(values);
+		return deletedValue;
 	}
 
 	@Override
