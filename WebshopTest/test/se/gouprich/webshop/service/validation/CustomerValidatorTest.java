@@ -38,7 +38,7 @@ public class CustomerValidatorTest
 	}
 
 	@Test
-	public void customerShouldHavePasswordWithTwoVersalTwoNumbersSpecialCharacter()
+	public void customerShouldHavePasswordWithAtLeastOneVersalTwoNumbersAndOneSpecialCharacter()
 	{
 		String password = "Aa12&";
 		
