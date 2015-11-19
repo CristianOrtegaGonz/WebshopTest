@@ -80,5 +80,4 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 		}
 		return false;
 	}
-
 }

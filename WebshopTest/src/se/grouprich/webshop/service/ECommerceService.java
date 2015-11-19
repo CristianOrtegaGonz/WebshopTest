@@ -91,7 +91,7 @@ public final class ECommerceService
 		{
 			throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
 		}
-		if (email.length() > 30)
+		if (!emailValidator.isLengthWithinRange(email))
 		{
 			throw new CustomerRegistrationException("Email address that is longer than 30 characters is not allowed");
 		}
