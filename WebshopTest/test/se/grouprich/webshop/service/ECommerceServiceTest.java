@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +113,7 @@ public class ECommerceServiceTest
 	}
 
 	@Test
-	public void customerShouldHavePasswordWithTwoVersalTwoNumbersSpecialCharacter() throws CustomerRegistrationException
+	public void customerShouldHavePasswordWithOneVersalTwoNumbersAndOneSpecialCharacter() throws CustomerRegistrationException
 	{
 		exception.expect(CustomerRegistrationException.class);
 		exception.expectMessage(equalTo("Password must have at least an uppercase letter, "
@@ -161,7 +160,23 @@ public class ECommerceServiceTest
 		verify(productRepositoryMock).read(id);
 	}
 
-	//TODO: Hämta alla produkter
+	@Test
+	public void shouldFetchAllProducts() throws ProductRegistrationException
+	{
+		Product product1 = new Product("id001", "Bord", 1000, 5);
+		Product product2 = new Product("id002", "Stol", 500, 10);
+		
+		Map<String, Product> products = new HashMap<>();
+		products.put(product1.getId(), product1);
+		products.put(product2.getId(), product2);
+		
+		when(productRepositoryMock.readAll()).thenReturn(products);
+		
+		Map<String, Product> allProducts = eCommerceService.fetchAllProducts();
+		
+		verify(productRepositoryMock).readAll();
+		assertThat(products, is(equalTo(allProducts)));	
+	}
 	
 	@Test
 	public void shouldCreateProduct() throws ProductRegistrationException, RepositoryException
@@ -222,7 +237,24 @@ public class ECommerceServiceTest
 
 		verify(customerRepositoryMock).read(id);
 	}
-	// Todo hämta alla customer
+	
+	@Test
+	public void shouldFetchAllCustomers() throws CustomerRegistrationException
+	{
+		Customer customer1 = new Customer("id1", "email@email.com", "secret", "Lars", "Larsson");
+		Customer customer2 = new Customer("id2", "mail@mail.com", "secret1", "Per", "Persson");
+		
+		Map<String, Customer> customers = new HashMap<>();
+		customers.put(customer1.getId(), customer1);
+		customers.put(customer2.getId(), customer2);
+		
+		when(customerRepositoryMock.readAll()).thenReturn(customers);
+		
+		Map<String, Customer> allCustomers = eCommerceService.fetchAllCustomers();
+		
+		verify(customerRepositoryMock).readAll();
+		assertThat(customers, is(equalTo(allCustomers)));	
+	}
 
 	@Test
 	public void shouldCreateCustomer() throws CustomerRegistrationException
@@ -286,7 +318,30 @@ public class ECommerceServiceTest
 		verify(orderRepositoryMock).read(id);
 	}
 
-	// Todo hämta alla order
+	@Test
+	public void shouldFetchAllOrders() throws CustomerRegistrationException
+	{
+		Customer customer1 = new Customer("id1", "email@email.com", "secret", "Lars", "Larsson");
+		Customer customer2 = new Customer("id2", "mail@mail.com", "secret", "Per", "Persson");
+		ShoppingCart shoppingCart1 = new ShoppingCart();
+		shoppingCart.setTotalPrice(200);
+		ShoppingCart shoppingCart2 = new ShoppingCart();
+		shoppingCart.setTotalPrice(400);
+		Order order1 = new Order("id10", customer1, shoppingCart1);
+		Order order2 = new Order("id20", customer2, shoppingCart2);
+		
+		Map<String, Order> orders = new HashMap<>();
+		orders.put(order1.getId(), order1);
+		orders.put(order2.getId(), order2);
+		
+		when(orderRepositoryMock.readAll()).thenReturn(orders);
+		
+		Map<String, Order> allOrders = eCommerceService.fetchAllOrders();
+		
+		verify(orderRepositoryMock).readAll();
+		assertThat(orders, is(equalTo(allOrders)));		
+	}
+	
 	@Test
 	public void shouldFetchOrdersByCustomer()
 	{
@@ -365,65 +420,4 @@ public class ECommerceServiceTest
 
 		assertSame(order1, order2);
 	}
-	
-	@Test
-	public void getAllCustomers() throws CustomerRegistrationException
-	{
-	Customer customer1 = new Customer("id1", "email@email.com", "secret", "Lars", "Larsson");
-	Customer customer2 = new Customer("id2", "mail@mail.com", "secret1", "Per", "Persson");
-
-	Map<String, Customer> customers = new HashMap<>();
-	customers.put(customer1.getId(), customer1);
-	customers.put(customer2.getId(), customer2);
-	
-	when(customerRepositoryMock.readAll()).thenReturn(customers);
-	
-	Map<String, Customer> allCustomers = eCommerceService.fetchAllCustomers();
-	
-	verify(customerRepositoryMock).readAll();
-	assertThat(customers, is(equalTo(allCustomers)));	
-	}
-	
-	@Test
-	public void getAllOrders() throws CustomerRegistrationException
-	{
-		Customer customer1 = new Customer("id1", "email@email.com", "secret", "Lars", "Larsson");
-		Customer customer2 = new Customer("id2", "mail@mail.com", "secret", "Per", "Persson");
-		ShoppingCart shoppingCart1 = new ShoppingCart();
-		shoppingCart.setTotalPrice(200);
-		ShoppingCart shoppingCart2 = new ShoppingCart();
-		shoppingCart.setTotalPrice(400);
-		Order order1 = new Order("id10", customer1, shoppingCart1);
-		Order order2 = new Order("id20", customer2, shoppingCart2);
-		
-		Map<String, Order> orders = new HashMap<>();
-		orders.put(order1.getId(), order1);
-		orders.put(order2.getId(), order2);
-		
-		when(orderRepositoryMock.readAll()).thenReturn(orders);
-		
-		Map<String, Order> allOrders = eCommerceService.fetchAllOrders();
-		
-		verify(orderRepositoryMock).readAll();
-		assertThat(orders, is(equalTo(allOrders)));		
-	}
-	
-	@Test
-	public void getAllProducts() throws ProductRegistrationException
-	{
-		Product product1 = new Product("id001", "Bord", 1000, 5);
-		Product product2 = new Product("id002", "Stol", 500, 10);
-		
-		Map<String, Product> products = new HashMap<>();
-		products.put(product1.getId(), product1);
-		products.put(product2.getId(), product2);
-		
-		when(productRepositoryMock.readAll()).thenReturn(products);
-		
-		Map<String, Product> allProducts = eCommerceService.fetchAllProducts();
-		
-		verify(productRepositoryMock).readAll();
-		assertThat(products, is(equalTo(allProducts)));	
-	}
-
 }
