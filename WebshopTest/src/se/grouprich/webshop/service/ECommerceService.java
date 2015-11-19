@@ -205,11 +205,11 @@ public final class ECommerceService
 	public List<Order> fetchOrdersByCustomer(Customer customer)
 	{
 		List<Order> ordersByCustomer = new ArrayList<>();
-		for (Order value : (orderRepository.readAll()).values())
+		for (Order order : (orderRepository.readAll()).values())
 		{
-			if (value.getCustomer().equals(customer))
+			if (order.getCustomer().equals(customer))
 			{
-				ordersByCustomer.add(value);
+				ordersByCustomer.add(order);
 			}
 		}
 		return ordersByCustomer;
