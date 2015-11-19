@@ -30,7 +30,7 @@ public final class Product implements Serializable, Identifiable<String>
 	}
 
 	@Override
-	public void setId(String productId)
+	public void setId(final String productId)
 	{
 		this.productId = productId;
 	}
@@ -50,19 +50,19 @@ public final class Product implements Serializable, Identifiable<String>
 		return price;
 	}
 
-	public void setStockQuantity(int stockQuantity)
+	public void setStockQuantity(final int stockQuantity)
 	{
 		this.stockQuantity = stockQuantity;
 	}
 
-	public void setOrderQuantity(int orderQuantity) throws OrderException
+	public void setOrderQuantity(final int orderQuantity) throws OrderException
 	{
 		this.orderQuantity = orderQuantity;
 	}
 
-	public void addOrderQuantity(int orderQuantity) throws OrderException
+	public void addOrderQuantity(final int orderQuantity) throws OrderException
 	{
-		this.orderQuantity = this.orderQuantity + orderQuantity;
+		this.orderQuantity += orderQuantity;
 	}
 
 	public int getOrderQuantity()
@@ -70,7 +70,7 @@ public final class Product implements Serializable, Identifiable<String>
 		return orderQuantity;
 	}
 
-	public void setPrice(double price)
+	public void setPrice(final double price)
 	{
 		this.price = price;
 	}
@@ -86,7 +86,7 @@ public final class Product implements Serializable, Identifiable<String>
 		if (other instanceof Product)
 		{
 			Product otherProduct = (Product) other;
-			return productId.equals(otherProduct.productId) && productName.equals(otherProduct.productName) && price == price;
+			return productId.equals(otherProduct.productId) && productName.equals(otherProduct.productName) && price == otherProduct.price;
 		}
 		return false;
 	}
@@ -96,6 +96,8 @@ public final class Product implements Serializable, Identifiable<String>
 	{
 		int result = 1;
 		result += productId.hashCode() * 37;
+		result += productName.hashCode() * 37;
+		result += price * 37;
 
 		return result;
 	}

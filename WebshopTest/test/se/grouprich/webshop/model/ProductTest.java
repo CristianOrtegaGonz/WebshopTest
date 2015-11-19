@@ -19,7 +19,8 @@ public class ProductTest
 	public void productWithIdenticalValuesShouldBeEqual() throws ProductRegistrationException 
 	{
 		product1 = new Product("1001", "Shampoo", 200, 20);
-		product2 = new Product("1001", "Shampoo", 200, 20);		
+		product2 = new Product("1001", "Shampoo", 200, 20);
+		
 		assertEquals("Two products with same product ID, name and price should be equal", product1, product2); 
 	}
 	

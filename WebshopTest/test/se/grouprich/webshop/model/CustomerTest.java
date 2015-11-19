@@ -23,7 +23,8 @@ public class CustomerTest
 	public void customerWithIdenticalValuesShouldBeEqual() throws CustomerRegistrationException 
 	{
 		customer1 = new Customer("1000", "arbieto@gmail.com", "H01&", "Haydee", "Arbieto");
-		customer2 = new Customer("1000", "arbieto@gmail.com", "H01&", "Haydee", "Arbieto");		
+		customer2 = new Customer("1000", "arbieto@gmail.com", "H01&", "Haydee", "Arbieto");	
+		
 		assertEquals("Two customers with same id and email should be equal", customer1, customer2); 
 	}
 	
