@@ -2,9 +2,7 @@ package se.grouprich.webshop.model;
 
 import static org.junit.Assert.*;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import se.grouprich.webshop.exception.CustomerRegistrationException;
 import se.grouprich.webshop.exception.OrderException;
@@ -17,9 +15,6 @@ public class OrderTest
 	private Order order1, order2;
 	private Customer customer1, customer2;
 	private ShoppingCart shoppingCart1, shoppingCart2;
-	
-	@Rule
-	public ExpectedException exception = ExpectedException.none();
 	
 	@Test
 	public void orderWithIdenticalValuesShouldBeEqual() throws CustomerRegistrationException, OrderException
