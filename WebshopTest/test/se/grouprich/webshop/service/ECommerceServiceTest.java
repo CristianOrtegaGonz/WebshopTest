@@ -160,6 +160,8 @@ public class ECommerceServiceTest
 		verify(productRepositoryMock).read(id);
 	}
 
+	//TODO: Hämta alla produkter
+	
 	@Test
 	public void shouldCreateProduct() throws ProductRegistrationException, RepositoryException
 	{

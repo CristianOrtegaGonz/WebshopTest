@@ -27,7 +27,7 @@ public class CustomerValidatorTest
 	}
 
 	@Test
-	public void customerShouldNotHaveEmailAddressThatIsLongerThan30Characters()
+	public void emailAddressShouldNotBeLongerThan30Characters()
 	{
 		String email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
 
@@ -38,7 +38,7 @@ public class CustomerValidatorTest
 	}
 
 	@Test
-	public void customerShouldHavePasswordWithAtLeastOneVersalTwoNumbersAndOneSpecialCharacter()
+	public void passwordShouldHaveAtLeastOneVersalTwoNumbersAndOneSpecialCharacter()
 	{
 		String password = "Aa12&";
 		
