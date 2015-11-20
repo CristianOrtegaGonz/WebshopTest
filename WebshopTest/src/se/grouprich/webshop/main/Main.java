@@ -38,7 +38,8 @@ public final class Main
 				fileProductRepository, idGenerator, passwordValidator, customerDuplicateValidator, productDuplicateValidator, emailValidator);
 
 		Customer customer1 = eCommerceService.createCustomer("Aaa12&", "Arbieto12*", "Haydee", "DeAlvarado");
-		Customer customer2 = eCommerceService.createCustomer("qqqq@mail.com", "Q#qq32", "hahaha", "hohoho");
+		eCommerceService.createCustomer("qqqq@mail.com", "Q#qq32", "hahaha", "hohoho");
+
 
 		customer1.setEmail("arbeito@mail.se");
 		passwordValidator.isValidPassword("Aaa12&");
@@ -50,7 +51,7 @@ public final class Main
 
 		Product product1 = eCommerceService.createProduct("Shampoo", 20.00, 6);
 		Product product2 = eCommerceService.createProduct("Treatment", 20.00, 10);
-		Product product3 = eCommerceService.createProduct("Eco Shampoo", 30.00, 100);
+		eCommerceService.createProduct("Eco Shampoo", 30.00, 100);
 		
 		ShoppingCart shoppingCart1 = eCommerceService.createShoppingCart();
 
@@ -118,7 +119,6 @@ public final class Main
 		{
 			System.out.println(customer);
 		}
-		System.out.println();
-		
+		System.out.println();	
 	}
 }
