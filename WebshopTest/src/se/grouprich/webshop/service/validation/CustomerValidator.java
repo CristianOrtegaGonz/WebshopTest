@@ -54,7 +54,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 	}
 
 	@Override
-	public boolean alreadyExsists(final String email)
+	public boolean alreadyExists(final String email)
 	{
 		for (Customer customer : customerRepository.readAll().values())
 		{

@@ -120,14 +120,14 @@ public class ECommerceServiceTest
 				+ "two digits and a special character such as !@#$%^&*(){}[]"));
 
 		String password = "1";
-		when(duplicateValidatorMock.alreadyExsists(email)).thenReturn(false);
+		when(duplicateValidatorMock.alreadyExists(email)).thenReturn(false);
 		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(true);
 		when(passwordValidatorMock.isValidPassword(password)).thenReturn(false);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 
 		eCommerceService.createCustomer(email, password, firstName, lastName);
 
-		verify(duplicateValidatorMock).alreadyExsists(email);
+		verify(duplicateValidatorMock).alreadyExists(email);
 		verify(emailValidatorMock).isLengthWithinRange(email);
 		verify(passwordValidatorMock).isValidPassword(password);
 		verify(idGeneratorMock).getGeneratedId();
@@ -184,7 +184,7 @@ public class ECommerceServiceTest
 	public void shouldCreateProduct() throws ProductRegistrationException, RepositoryException
 	{
 		Product product1 = new Product(id, productName, price, stockQuantity);
-		when(duplicateValidatorMock.alreadyExsists(productName)).thenReturn(false);
+		when(duplicateValidatorMock.alreadyExists(productName)).thenReturn(false);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 		when(productRepositoryMock.create(product1)).thenReturn(product1);
 
@@ -192,7 +192,7 @@ public class ECommerceServiceTest
 
 		assertSame(product1, product2);
 
-		verify(duplicateValidatorMock).alreadyExsists(productName);
+		verify(duplicateValidatorMock).alreadyExists(productName);
 		verify(idGeneratorMock).getGeneratedId();
 		verify(productRepositoryMock).create(product1);
 	}
@@ -262,7 +262,7 @@ public class ECommerceServiceTest
 	public void shouldCreateCustomer() throws CustomerRegistrationException
 	{
 		Customer customer1 = new Customer(id, email, password, firstName, lastName);
-		when(duplicateValidatorMock.alreadyExsists(email)).thenReturn(false);
+		when(duplicateValidatorMock.alreadyExists(email)).thenReturn(false);
 		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(true);
 		when(passwordValidatorMock.isValidPassword(password)).thenReturn(true);
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
@@ -272,7 +272,7 @@ public class ECommerceServiceTest
 
 		assertSame(customer1, customer2);
 
-		verify(duplicateValidatorMock).alreadyExsists(email);
+		verify(duplicateValidatorMock).alreadyExists(email);
 		verify(emailValidatorMock).isLengthWithinRange(email);
 		verify(passwordValidatorMock).isValidPassword(password);
 		verify(idGeneratorMock).getGeneratedId();

@@ -92,7 +92,7 @@ public final class ECommerceService
 	// fixat så att det är lättare att läsa
 	public Customer createCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
-		if (customerDuplicateValidator.alreadyExsists(email))
+		if (customerDuplicateValidator.alreadyExists(email))
 		{
 			throw new CustomerRegistrationException("Customer with E-mail: " + email + " already exists");
 		}
@@ -111,7 +111,7 @@ public final class ECommerceService
 
 	public Product createProduct(String productName, double price, int stockQuantity) throws ProductRegistrationException, RepositoryException
 	{
-		if (productDuplicateValidator.alreadyExsists(productName))
+		if (productDuplicateValidator.alreadyExists(productName))
 		{
 			throw new ProductRegistrationException("Product with name: " + productName + " already exists");
 		}
