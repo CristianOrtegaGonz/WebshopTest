@@ -19,7 +19,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 		boolean versal = false;
 		boolean specialCharacter = false;
 		int counterNumbers = 0;
-		
+
 		if (password == null || password.trim().isEmpty())
 		{
 			return false;
@@ -69,7 +69,7 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 	@Override
 	public boolean isLengthWithinRange(final String email)
 	{
-		if (email.length() <= 30)
+		if (email.length() <= 30 && (email != null || !email.trim().isEmpty()))
 		{
 			return true;
 		}
