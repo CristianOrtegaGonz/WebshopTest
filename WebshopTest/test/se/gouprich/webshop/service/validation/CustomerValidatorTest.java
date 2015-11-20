@@ -20,12 +20,22 @@ public class CustomerValidatorTest
 	@Test
 	public void emailAddressShouldNotBeLongerThan30Characters()
 	{
-		String email = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
+		String email1 = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@aa.com";
+		String email2 = " ";
+		String email3 = null;
+		String email4 = "aaaaaaa@aa.com";
 
-		boolean valid = customerValidator.isLengthWithinRange(email);
+		boolean valid1 = customerValidator.isLengthWithinRange(email1);
+		boolean valid2 = customerValidator.isLengthWithinRange(email2);
+		boolean valid3 = customerValidator.isLengthWithinRange(email3);
+		boolean valid4 = customerValidator.isLengthWithinRange(email4);
 
-		assertFalse(valid);
-		assertTrue(email.length() > 30);
+		assertFalse(valid1);
+		assertFalse(valid2);
+		assertFalse(valid3);
+		assertTrue(valid4);
+		assertTrue(email1.length() > 30);
+		assertTrue(email4.length() <= 30);
 	}
 
 	@Test
