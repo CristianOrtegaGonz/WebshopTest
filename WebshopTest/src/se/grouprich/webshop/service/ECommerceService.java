@@ -89,7 +89,6 @@ public final class ECommerceService
 		return new ShoppingCart();
 	}
 
-	// fixat så att det är lättare att läsa
 	public Customer createCustomer(String email, String password, String firstName, String lastName) throws CustomerRegistrationException
 	{
 		if (customerDuplicateValidator.alreadyExists(email))
