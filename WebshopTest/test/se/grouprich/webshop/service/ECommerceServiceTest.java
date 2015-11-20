@@ -119,8 +119,6 @@ public class ECommerceServiceTest
 		exception.expectMessage(equalTo("Password must have at least an uppercase letter, "
 				+ "two digits and a special character such as !@#$%^&*(){}[]"));
 
-		String password = "1";
-
 		when(duplicateValidatorMock.alreadyExists(email)).thenReturn(false);
 		when(emailValidatorMock.isLengthWithinRange(email)).thenReturn(true);
 		when(passwordValidatorMock.isValidPassword(password)).thenReturn(false);
@@ -354,7 +352,8 @@ public class ECommerceServiceTest
 	{
 		String id2 = "1003";
 		String id3 = "1004";
-		Customer customer1 = new Customer("1002", "mail@mail", "secret1", "name", "username");
+
+		Customer customer1 = new Customer("1002", "mail@mail", "F56&iRT", "name", "username");
 		Order order1 = new Order(id, customer, shoppingCart);
 		Order order2 = new Order(id2, customer, shoppingCart);
 		Order order3 = new Order(id3, customer1, shoppingCart);
@@ -380,6 +379,7 @@ public class ECommerceServiceTest
 		ShoppingCart shoppingCart = new ShoppingCart();
 		shoppingCart.setTotalPrice(200);
 		Order order1 = new Order(id, customer, shoppingCart);
+		
 		when(idGeneratorMock.getGeneratedId()).thenReturn(id);
 		when(orderRepositoryMock.create(order1)).thenReturn(order1);
 
