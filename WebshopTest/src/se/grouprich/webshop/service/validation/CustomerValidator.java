@@ -69,9 +69,12 @@ public final class CustomerValidator implements PasswordValidator, DuplicateVali
 	@Override
 	public boolean isLengthWithinRange(final String email)
 	{
-		if (email.length() <= 30 && (email != null || !email.trim().isEmpty()))
+		if (email != null | !email.trim().isEmpty())
 		{
-			return true;
+			if (email.length() <= 30)
+			{
+				return true;
+			}
 		}
 		return false;
 	}

@@ -368,6 +368,7 @@ public class ECommerceServiceTest
 
 		assertThat(ordersByCustomer, hasSize(2));
 		assertThat(ordersByCustomer, containsInAnyOrder(order1, order2));
+
 		verify(orderRepositoryMock, times(1)).readAll();	
 	}
 
